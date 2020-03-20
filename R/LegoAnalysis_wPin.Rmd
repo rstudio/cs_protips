@@ -1,0 +1,118 @@
+---
+editor_options:
+  chunk_output_type: console
+output:
+  html_document: default
+params:
+  year:
+    input: slider
+    label: Year
+    max: 2017
+    min: 1953
+    sep: ''
+    step: 1
+    value: 1978
+---
+### Analysis of Lego Set Part Count in `r params$year`
+*Author: Katie Masiello*  
+*Notes: LEGO data sourced with gratitude from https://www.kaggle.com/rtatman/lego-database for the purposes of demonstrating parameterized R Markdown reporting and building a Shiny app.*
+```{r setup and libraries, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(kableExtra)
+library(pins)
+
+
+```
+
+```{r pin and retrieve dataset}
+pins::board_register(
+    "rsconnect",
+    server = "https://colorado.rstudio.com/rsc/",
+    key = Sys.getenv("RSC_API_KEY")
+    )
+## ^ the reason the above worked locally without an API key because the local IDE has the publishing token in it so Connect says I have access to this.
+
+# Do this once to pin my data to RSC
+# setsData <-read_csv(("sets.csv"))
+# lego_set_data <- setsData
+# pin(lego_set_data, description = "LEGO set data", board = "rsconnect")
+
+# Retrieve Pin
+setsData <- pin_get("katie/lego-set-data", board = "rsconnect")
+```
+
+
+
+```{r Number of Sets}
+parts_in_year <- setsData %>% 
+  # filter(year <= params$year + 2 & year >= params$year - 2) %>% 
+  filter(year == params$year) %>% 
+  select(year, num_parts, name, set_num) %>% 
+  arrange(desc(num_parts))
+
+summary_table <- data.frame(`Number of Sets` = nrow(parts_in_year), 
+                            `Mean Parts` = round(mean(parts_in_year$num_parts, na.rm = TRUE),0), 
+                            `Smallest Set` = min(parts_in_year$num_parts, na.rm = TRUE), 
+                            `Largest Set` = max(parts_in_year$num_parts, na.rm=TRUE))
+
+knitr::kable(summary_table, 
+             col.names = c("Number of Sets", 
+                           "Mean Parts", 
+                           "Smallest Set", 
+                           "Largest Set")) %>% 
+  kable_styling(full_width = FALSE, position="left")
+```
+  
+##### Largest Set in `r params$year`
+```{r}
+biggest_set <- head(select(parts_in_year, set_num, name, num_parts), 1)
+biggest_url <- paste0("https://images.brickset.com/sets/images/",biggest_set$set_num, ".jpg")
+```
+<img src="`r biggest_url`">
+
+```{r}
+knitr::kable(biggest_set, col.names = c("Set Number", "Name", "Number of Parts")) %>% 
+kable_styling(full_width = FALSE, position = "left")
+```
+
+
+
+```{r}
+ggplot(parts_in_year, aes(year, num_parts)) + 
+  geom_violin(fill=c("#75AADB")) + 
+  scale_x_discrete(limits = params$year) +
+  # scale_y_continuous(breaks=seq(0,max(parts_in_year$num_parts), 100)) +
+  geom_boxplot(width=0.1) +
+  theme_minimal() + 
+  labs(x="", y="Number of Parts in Set", title="Lego Set Part Count Distribution") +
+  coord_flip()
+
+
+```
+
+
+```{r Largest Sets}
+sets_in_year <- setsData %>% 
+  filter(year == params$year) %>% 
+  arrange(desc(num_parts)) %>% 
+  mutate(url = paste0('<a href=\"https://brickset.com/sets/',set_num,'\">',set_num ,"</a>")) %>% 
+  # mutate(url = paste0("[",set_num,"]","(https://brickset.com/sets/", set_num,")")) %>% 
+  select(url, name, num_parts) %>% 
+  rename(`Set Number` = url, 
+         `Name` = name, 
+         `Number of Parts` = num_parts)
+
+DT::datatable(sets_in_year, escape = FALSE, 
+              extensions = 'Buttons', options = list(
+    dom = 'Bfrtip',
+    buttons = 
+      list('copy', 'print', list(
+        extend = 'collection',
+        buttons = c('csv', 'excel', 'pdf'),
+        text = 'Download'
+      )))
+              )
+
+```
+

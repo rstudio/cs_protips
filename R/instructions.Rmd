@@ -1,6 +1,6 @@
 ---
 title: "Instructions"
-author: "Elena Ruiz"
+author: "Elena Ruiz and Katie Masiello"
 date: "3/10/2020"
 output: html_document
 ---

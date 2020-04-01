@@ -1,8 +1,10 @@
 ---
 title: "Instructions"
-author: "Elena Ruiz and Katie Masiello" 
+author: "Elena Ruiz and Katie Masiello"
 date: "3/20/2020"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 Before I can publish a pin to the RSC board, I have to get an API key from Connect and save this to my sys environment variables.  

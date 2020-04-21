@@ -10,7 +10,7 @@ Before I can publish a pin to the RSC board, I have to get an API key from Conne
 1. In RSC, generate an API key.  I named this "forusingpins" and copied the value to the clipboard  
 2. now in R I have to save this API key to my system environment variables.  Since I want this to persist and not evaporate every time R restarts, I need to write this in my .Rprofile. Think about if you want this to be in your Project .Rproject file or your home directory .Rprofile. 
 Do this with: 
-`Sys.setenv("RSC_API_KEY" = <paste string here>)`
+`Sys.setenv("RSC_API_KEY" = <FiUJ7OKDXzx0PlJNfthLgmkIevQW85op>)`
 3. Now I register the board, which isn't initializing a new board, it's just telling my session that there's a place we can stick stuff.  "register" means I see you and know you're there, it's not creating somethign from nothing. Use `pins::board_register(
     "rsconnect", 
     server = "https://colorado.rstudio.com/rsc/",

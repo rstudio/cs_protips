@@ -1,25 +1,25 @@
 ---
-title: "Using `pins`"
-author: "Your Name"
-date: "The Date"
+title: "Title"
 output:
-  html_document: 
-    css: "style.css"
-    includes:
-      before_body: header.html
-      after_body: footer.html
   pdf_document: 
     latex_engine: xelatex
+    includes:
+      in_header: template_files/header.tex
+  html_document: 
+    css: "template_files/style.css"
+    includes:
+      before_body: template_files/header.html
+      after_body: template_files/footer.html
 mainfont: Source Sans Pro
-header-includes:
-- \usepackage{titling}
-- \pretitle{\begin{center}\LARGE\includegraphics[width=12cm]{protips.png}\\[\bigskipamount]}
-- \posttitle{\end{center}}
+geometry: "left=1cm,right=1cm,top=5.3cm,bottom=3cm"
+classoption:
+- twocolumn
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
 
 # Why You Should Use Pins
 As a data scientist, it’s likely that a recurring challenge is to easily share content with others in your organization. One of the most persistent problems is knowing how and where to store resources, especially resources that can’t be easily put in a database for others to access without needing to email files back and forth - for example model outputs, csv files, and r objects.

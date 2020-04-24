@@ -1,0 +1,85 @@
+---
+title: "example_pins"
+author: "Katie Masiello"
+date: "4/23/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Prior to running this script, ensure you have created an API key from RStudio Connect (see: https://docs.rstudio.com/connect/user/api-keys/) and saved this into your system environment variables with:
+```{r eval=FALSE}
+# Sys.setenv("RSC_API_KEY" = “key value”) 
+# Do this once and do it in your Console and not as part of your script.  Keep your keys secure!
+```
+
+Let's say we are running an important analysis that requires body temperature mesurements of beavers. Let's look at our data first.  
+```{r}
+library(datasets)
+head(beaver1)
+```
+Very nice!
+
+Now we want to pin this data to Connect so it is accessible to our colleagues for their important work.  
+
+First, register the board so your session knows that it can place content on your Connect board:
+```{r}
+pins::board_register(
+    "rsconnect", 
+    server = "https://colorado.rstudio.com/rsc", # <- replace this with your server name 
+    key = Sys.getenv("RSC_API_KEY")
+    )
+```
+
+After you ran the script above, did you see the Connections pane in your RStudio IDE now shows the board `rsconnect`?  Here's what mine looks like:
+![Connections pane after registering rsconnect board](using_pins/connections_pane.png)
+
+Now we want to pin our beaver data to Connect. 
+```{r}
+pins::pin(beaver1, description = "Beaver Body Temperature Measurements", board = "rsconnect")
+```
+
+Take a moment to switch to Connect and give yourself a pat on the back.  Your data is now pinned on Connect!  
+![Oh joy! The dataset is pinned to Connect!](using_pins/pinned_to_connect.png)
+
+From this window in Connect, you can adjust the user access permissions, add collaborators, and even give your pin a custom URL (see mine at https://colorado.rstudio.com/rsc/beaver-data/)
+![Access permissions and controls in Connect](using_pins/pin_access_controls_and_vanityURL.png)
+Now let's pretend you're a colleague and you want to access this data for your own analysis.  First we'll 
+restart our R session to give a clean slate.  Feel free to put on a hat if it helps you to get into character.
+```{r}
+#rstudioapi::restartSession() 
+```
+
+Notice that your Environment pane is now empty.  No beavers there.  
+![Empty environments pane](using_pins/empty_environments_pane.png)
+Now let's get the dataset from Connect. 
+
+In Connect, did you notice the header information on your pin?  This is present on every pin published to Connect and it provides the code in  R or Python to retrieve your pin.  Handy, huh?
+![Code in Connect to retrieve your pin](using_pins/retrieval_code.png)
+
+So let's copy that code into our analysis and assign the retrieved pin as a variable.
+```{r}
+# Register RStudio Connect
+library(pins)
+board_register("rsconnect", server = "https://colorado.rstudio.com/rsc")
+
+# Retrieve Pin
+beaver_data <- pin_get("katie/beaver1", board = "rsconnect")
+
+#Check out the pin
+head(beaver_data)
+```
+Jackpot!  
+
+So you think you're hot stuff and off and running?  For now, perhaps.  But let's say you want to publish something to Connect (like this RMD file), which uses pinned content in it.  Go ahead, try publishing this document to Connect right now. 
+
+Did you just get a ugly, angry, red error message?  
+![Deployment error message](using_pins/deployment_error.png)
+
+Stop cursing! This is one time that the error message is good.  You've done it all right so far! This error is telling us that Connect can't find an API key.  "API keys again? Didn't we do that already?"  Yes, we did that for the RStudio IDE session.  But not for Connect.  Easy to fix.  
+
+Jump over to Connect and open your sad, un-rendered content.  
+![See the "This output has not been rendered" message in Connect](using_pins/sad_unrendered_content.png)
+

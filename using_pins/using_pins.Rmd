@@ -46,7 +46,7 @@ Once resources are pinned, you and your colleagues can also discover or find the
 # How to Use Pins / Example or walk me through my first pin
 <structure this like a recipe.  what ingredients do you need?>
 ingredients - data set
-tools - API key, connect
+tools - API key, connect and publisher permissions
 (you can do this on your own, aren't reliant on someone else)
 There are four main steps to using Pins. First, install the package, get your R session to connect with your board, and then Pin a resource. Finally, you can get resources. Let’s walk through each step using RStudio Connect as an example.
 
@@ -85,7 +85,7 @@ You’re ready to publish your Pin. The first time you publish, it will fail say
 
 # Where do i go for help / other resources / are there any other considerations? 
 * current release version as of time of writing, where to get the package  
-
+for a downloadable example that accompanies this Pro Tip, see: <link to deployed RMD on colorado>
 Should we add this in somehow?  Go try on your own:
 Pins is particularly useful for sharing R objects when the objects are
 

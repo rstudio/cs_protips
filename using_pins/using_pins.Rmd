@@ -37,16 +37,11 @@ This is where Pins come in. RStudio developed Pins to make the process of discov
 If you’re asking colleagues to download files before running your code, redeploying an entire app just to update the model or data in it, or if many pieces of your content are pointed to the same dataset, read on.
 
 # What are Pins?
-Pins are almost exactly what they sound like: a way to store and then remotely access R and Python objects. You can take an object and “pin” to a number of boards, including RStudio Connect, S3, Google Cloud, even or integrate them to your website.
+Pins are almost exactly what they sound like: a way to store and then remotely access R and Python objects. Pins live on boards. A board can exist on a number of services(? right word?), including RStudio Connect, S3, Google Cloud - you can even integrate them into your website.
 
-Once resources are pinned, you can also discover them. Pins let you search well-known data repositories that are guaranteed to contain datasets, instead of searching on the internet and hoping to find what you need, as well as enhancing the discoverability of internally-created datasets.
+Once resources are pinned, you and your colleagues can also discover or find them. Pins on sites like Kaggle let you search well-known data repositories that are guaranteed to contain datasets, instead of searching on the internet and hoping to find what you need.  And when you use pins internal to your organization on RStudio Connect, you enhance the discoverability of your datasets with the same access controls you're accustomed to for any content published to Connect.
 
-The use cases are too many to count, so in the next section, you’ll learn how to pin your first resource using RStudio Connect. From there, you can check out this website for further inspiration on how to use Pins to make your day-to-day life easier.
-
-
-
-
-
+<!-- The use cases are too many to count, so in the next section, you’ll learn how to pin your first resource using RStudio Connect. From there, you can check out this website for further inspiration on how to use Pins to make your day-to-day life easier. -->
 
 # How to Use Pins / Example or walk me through my first pin
 <structure this like a recipe.  what ingredients do you need?>

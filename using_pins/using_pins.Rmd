@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 ```
 
 
-# When Workflows Get Clunky 
+# When your colleague messes up ur git workflow
 <!-- # Why You Should Use Pins -->
 * Does your workflow contain `read.csv()` for a data file that your colleague emails to you after every update?  
 * Are you working with ephemeral data that refreshes frequently?  

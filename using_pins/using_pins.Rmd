@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 ```
 
 
-# When Workflows Get Clunky 
+# When your workflow is chunky
 <!-- # Why You Should Use Pins -->
 * Does your workflow contain `read.csv()` for a data file that your colleague emails to you after every update?  
 * Are you working with ephemeral data that refreshes frequently?  
@@ -29,38 +29,50 @@ knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 * Do multiple apps you've created need to call a model that you developed?  
 * Are you saving `.R` or `.RData` objects to be called later?  
 
-The habits and methods (??) above can thrust a speedbump in your workflow. Often data scientists struggle to share and reuse content; knowing how and where to store resources, especially resources that can't be put into a database, is a persistent problem.  
+These habits and methods can thrust a speed bump in your workflow. Data scientists can struggle to share and reuse content; knowing how and where to store resources, especially resources that can't be put into a database, is a persistent problem.  
 <!-- As a data scientist, does your analysis or pipeline to production hit a speed bump because you're emailing csv files and  it’s likely that a recurring challenge is to easily share content with others in your organization. One of the most persistent problems is knowing how and where to store resources, especially resources that can’t be easily put in a database for others to access without needing to email files back and forth - for example model outputs, csv files, and r objects. -->
 
-This is where Pins come in. RStudio developed Pins to make the process of discovering, caching, and sharing resources simpler.
+This is where Pins come in. Here at RStudio, we developed Pins to make the process of discovering, caching, and sharing resources simpler, all with the ultimate aim of helping you create efficient data workflows.
 
-If you’re asking colleagues to download files before running your code, redeploying an entire app just to update the model or data in it, or if many pieces of your content are pointed to the same dataset, read on.
+If you’re asking your colleagues to download files before running your code, redeploying an entire app just to update the model or data in it, or if many pieces of your content are pointed to the same dataset, you have a use case for pins.
 
 # What are Pins?
-Pins are almost exactly what they sound like: a way to store and then remotely access R and Python objects. Pins live on boards. A board can exist on a number of services(? right word?), including RStudio Connect, S3, Google Cloud - you can even integrate them into your website.
+Pins are pretty much what they sound like: they’re a way to store and then remotely access R and Python objects, just like you’d pin a sticky note to a (virtual) cork board.
 
-Once resources are pinned, you and your colleagues can also discover or find them. Pins on sites like Kaggle let you search well-known data repositories that are guaranteed to contain datasets, instead of searching on the internet and hoping to find what you need.  And when you use pins internal to your organization on RStudio Connect, you enhance the discoverability of your datasets with the same access controls you're accustomed to for any content published to Connect.
+You can take an object, like a model output, and “pin” it to your board, which can be RStudio Connect, S3, Google Cloud, or even your website.
+
+Once you’ve Pinned a resource, other folks can discover them. This is great for two reasons: first, Pins on sites like Kaggle let you search well-known data repositories that are guaranteed to contain datasets, instead of searching on the internet and hoping to find what you need. Secondly, Pins also enhance the discoverability of internally-created datasets with the same access controls you're accustomed to for any content published to Connect, which is great for learning more about what your colleagues are up to.
+
+In the next section, you’ll learn how to Pin your first resource using RStudio Connect. From there, you can check out this website <https://pins.rstudio.com> for further inspiration on how to use Pins to make your day-to-day life easier.
 
 <!-- The use cases are too many to count, so in the next section, you’ll learn how to pin your first resource using RStudio Connect. From there, you can check out this website for further inspiration on how to use Pins to make your day-to-day life easier. -->
 
 # How to Use Pins / Example or walk me through my first pin
-<structure this like a recipe.  what ingredients do you need?>
-ingredients - data set
-tools - API key, connect and publisher permissions
-(you can do this on your own, aren't reliant on someone else)
-There are four main steps to using Pins. First, install the package, get your R session to connect with your board, and then Pin a resource. Finally, you can get resources. Let’s walk through each step using RStudio Connect as an example.
+<!-- I like walk me through my first pin -->
+You can think of this process in four main steps: First, install the package. Second, get your R session to connect with your board. Third, and most excitingly, you Pin a resource. Finally, you can get resources that you or others have Pinned. Let’s walk through each step using RStudio Connect as an example.
 
-Before you can publish your first pin to the RStudio Connect board, you have to get an API key from Connect and save this to your system environment variables^[This is the best practice rather than hard coding the API key into your script. Remember, your keys should be kept secure!]. This is not as intimidating as it sounds - we'll walk you through the steps below!
+Before you begin, make sure you have all the resources you'll need to hand. Go ahead and pick out a data set you want to pin. Make sure you have the API key you'll need to use, as well as Publisher permissions on Connect. 
 
-1. Generate an API key in RStudio Connect.^[for full instructions, see https://docs.rstudio.com/connect/user/api-keys/] Give this key any name you like and be certain to copy the value to your clipboard.
-1. Save this API key to your system environment variables - Switch back to your RStudio IDE and run the following in the Console, pasting your API key value into the command: 
+That's all you need to get started!
+
+First step: go ahead and install the `pins` package.
+``` {r install pins}
+install.packages("pins")
+```
+
+Next, connect your R session to a board. Before you can publish your first pin to the RStudio Connect board, you have to get an API key from Connect and save this to your system environment variables. This is the best practice, instead of hard coding the API key into your script. Remember, your keys should be kept secure! This is not as intimidating as it sounds - let's walk through the steps.
+
+Generate an API key in RStudio Connect.^[for full instructions, see https://docs.rstudio.com/connect/user/api-keys/] Give this key any name you like, like `forusingpins` and be certain to copy the value to your clipboard.
+
+Save this API key to your system environment variables. You can do this by switching back to your RStudio IDE and run the following in the Console, pasting your API key value into the command: 
 <!-- Now in R, you have to save this API key to your system environment variables.  Since you want this to persist and not evaporate every time R restarts, write this in your .Rprofile. Think about if you want this to be in your Project .Rprofile file or your home directory .Rprofile depending on whether you’ll use it just for this project, or for several.  -->
 
 <!-- Wherever you’re setting it, you’ll add a line like:  -->
 ```{r}
 Sys.setenv("RSC_API_KEY" = “key value”)
 ```
-3. "Register" the board.^[Don't let the vocabulary throw you. This just means you're identifying a location where you can store resources; think of it as registering (or recognizing) the board location within your current session.] Add the following to your script, inserting your own server address:
+"Register" the board.^[Don't let the vocabulary throw you. This just means you're identifying a location where you can store resources Add the following to your script, inserting your own server address:
+<!-- ; think of it as registering (or recognizing) the board location within your current session.] -->
 ```{r}
 pins::board_register(
     "rsconnect", 
@@ -69,7 +81,7 @@ pins::board_register(
     )
 ```
 
-4. Now you’re going to Pin your first resource. Put your object on the rsconnect board with:
+The third step: you’re going to Pin your first resource. Put your object on the rsconnect board with:
 ```{r}
 pin(my_data, description = "Super Cool data set", board = "rsconnect")
 ```

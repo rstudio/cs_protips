@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 ```
 
 
-# When your workflow is chunky
+# When your workflow is clunky
 <!-- # Why You Should Use Pins -->
 * Does your workflow contain `read.csv()` for a data file that your colleague emails to you after every update?  
 * Are you working with ephemeral data that refreshes frequently?  
@@ -29,7 +29,7 @@ knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 * Do multiple apps you've created need to call a model that you developed?  
 * Are you saving `.R` or `.RData` objects to be called later?  
 
-These habits and methods can thrust a speed bump in your workflow. Data scientists can struggle to share and reuse content; knowing how and where to store resources, especially resources that can't be put into a database, is a persistent problem.  
+These types of workflows can slow you down unnecessarily. Data scientists can struggle to share and reuse content; knowing how and where to store resources, especially resources that can't be put into a database, is a persistent problem.  
 <!-- As a data scientist, does your analysis or pipeline to production hit a speed bump because you're emailing csv files and  it’s likely that a recurring challenge is to easily share content with others in your organization. One of the most persistent problems is knowing how and where to store resources, especially resources that can’t be easily put in a database for others to access without needing to email files back and forth - for example model outputs, csv files, and r objects. -->
 
 This is where Pins come in. Here at RStudio, we developed Pins to make the process of discovering, caching, and sharing resources simpler, all with the ultimate aim of helping you create efficient data workflows.
@@ -69,9 +69,10 @@ Save this API key to your system environment variables. You can do this by switc
 
 <!-- Wherever you’re setting it, you’ll add a line like:  -->
 ```{r}
-Sys.setenv("RSC_API_KEY" = “key value”)
+Sys.setenv("RSC_API_KEY" = "key value")
 ```
-"Register" the board.^[Don't let the vocabulary throw you. This just means you're identifying a location where you can store resources Add the following to your script, inserting your own server address:
+
+"Register" the board.^[Don't let the vocabulary throw you. This just means you're identifying a location where you can store resources] Add the following to your script, inserting your own server address:
 <!-- ; think of it as registering (or recognizing) the board location within your current session.] -->
 ```{r}
 pins::board_register(

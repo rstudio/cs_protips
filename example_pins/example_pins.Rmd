@@ -33,19 +33,26 @@ pins::board_register(
     )
 ```
 
-After you ran the script above, did you see the Connections pane in your RStudio IDE now shows the board `rsconnect`?  Here's what mine looks like:
-![Connections pane after registering rsconnect board](using_pins/connections_pane.png)
-
+After you ran the script above, did you see the Connections pane in your RStudio IDE now shows the board `rsconnect`?  Here's what mine looks like:  
+```{r, echo=FALSE, out.width = '65%'}
+knitr::include_graphics("connections_pane.png")
+```
+  
 Now we want to pin our beaver data to Connect. 
 ```{r}
 pins::pin(beaver1, description = "Beaver Body Temperature Measurements", board = "rsconnect")
 ```
 
 Take a moment to switch to Connect and give yourself a pat on the back.  Your data is now pinned on Connect!  
-![Oh joy! The dataset is pinned to Connect!](using_pins/pinned_to_connect.png)
-
-From this window in Connect, you can adjust the user access permissions, add collaborators, and even give your pin a custom URL (see mine at https://colorado.rstudio.com/rsc/beaver-data/)
-![Access permissions and controls in Connect](using_pins/pin_access_controls_and_vanityURL.png)
+```{r, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("pinned_to_connect.png")
+```
+  
+From this window in Connect, you can adjust the user access permissions, add collaborators, and even give your pin a custom URL (see mine at https://colorado.rstudio.com/rsc/beaver-data/)  
+```{r, echo=FALSE, out.width = '30%'}
+knitr::include_graphics("pin_access_controls_and_vanityURL.png")
+```
+  
 Now let's pretend you're a colleague and you want to access this data for your own analysis.  First we'll 
 restart our R session to give a clean slate.  Feel free to put on a hat if it helps you to get into character.
 ```{r}
@@ -53,17 +60,23 @@ restart our R session to give a clean slate.  Feel free to put on a hat if it he
 ```
 
 Notice that your Environment pane is now empty.  No beavers there.  
-![Empty environments pane](using_pins/empty_environments_pane.png)
+```{r, echo=FALSE, out.width = '50%'}
+knitr::include_graphics("empty_environments_pane.png")
+```
+  
 Now let's get the dataset from Connect. 
 
-In Connect, did you notice the header information on your pin?  This is present on every pin published to Connect and it provides the code in  R or Python to retrieve your pin.  Handy, huh?
-![Code in Connect to retrieve your pin](using_pins/retrieval_code.png)
-
+In Connect, did you notice the header information on your pin?  This is present on every pin published to Connect and it provides the code in  R or Python to retrieve your pin.  Handy, huh?  
+```{r, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("retrieval_code.png")
+```
+  
 So let's copy that code into our analysis and assign the retrieved pin as a variable.
 ```{r}
 # Register RStudio Connect
 library(pins)
-board_register("rsconnect", server = "https://colorado.rstudio.com/rsc")
+board_register("rsconnect", server = "https://colorado.rstudio.com/rsc",
+    key = Sys.getenv("RSC_API_KEY"))
 
 # Retrieve Pin
 beaver_data <- pin_get("katie/beaver1", board = "rsconnect")
@@ -71,15 +84,22 @@ beaver_data <- pin_get("katie/beaver1", board = "rsconnect")
 #Check out the pin
 head(beaver_data)
 ```
+  
 Jackpot!  
 
 So you think you're hot stuff and off and running?  For now, perhaps.  But let's say you want to publish something to Connect (like this RMD file), which uses pinned content in it.  Go ahead, try publishing this document to Connect right now. 
 
 Did you just get a ugly, angry, red error message?  
-![Deployment error message](using_pins/deployment_error.png)
+```{r, echo=FALSE, out.width = '80%'}
+knitr::include_graphics("deployment_error.png")
+```
 
-Stop cursing! This is one time that the error message is good.  You've done it all right so far! This error is telling us that Connect can't find an API key.  "API keys again? Didn't we do that already?"  Yes, we did that for the RStudio IDE session.  But not for Connect.  Easy to fix.  
+
+Stop cursing! This is one time that the error message is good.  You've done it all right so far! Your error message might look a little different from mine, depending on what version of Connect you have, but the issue is the same.  This error is telling us that Connect can't find an API key.  *"API keys again? Didn't we do that already?"*  Yes, we did that for the RStudio IDE session, but not for Connect.  Stick with me and we'll get there.  
 
 Jump over to Connect and open your sad, un-rendered content.  
-![See the "This output has not been rendered" message in Connect](using_pins/sad_unrendered_content.png)
-
+```{r, echo=FALSE, out.width = '100%'}
+knitr::include_graphics("sad_unrendered_content.png")
+```
+  
+Now in the right hand side pane, select the 

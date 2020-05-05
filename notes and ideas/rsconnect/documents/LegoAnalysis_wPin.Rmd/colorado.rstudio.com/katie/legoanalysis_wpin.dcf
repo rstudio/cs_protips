@@ -1,0 +1,12 @@
+name: legoanalysis_wpin
+title: LegoAnalysis_wPin
+username: katie
+account: katie
+server: colorado.rstudio.com
+hostUrl: https://colorado.rstudio.com/rsc/__api__
+appId: 5900
+bundleId: 36859
+url: https://colorado.rstudio.com/rsc/content/5900/
+when: 1587768280.5573
+asMultiple: FALSE
+asStatic: FALSE

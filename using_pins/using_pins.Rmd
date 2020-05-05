@@ -5,12 +5,12 @@ output:
     latex_engine: xelatex
     includes:
       in_header: template_files/header.tex
-  html_document: 
+  html_document:
     css: "template_files/style.css"
     includes:
       before_body: template_files/header.html
       after_body: template_files/footer.html
-mainfont: Source Sans Pro
+#mainfont: Source Sans Pro
 geometry: "left=1cm,right=1cm,top=5.3cm,bottom=3cm"
 classoption:
 - twocolumn
@@ -87,7 +87,8 @@ pins::board_register(
 
 The third step: you’re going to `pin` your first resource. Put your object on the rsconnect board with:
 ```{r}
-pin(my_data, description = "Super cool data set", board = "rsconnect")
+pin(my_data, description = "Super cool data set",
+    board = "rsconnect")
 ```
 
 And now for the fourth, step, you can retrieve a `pin`.
@@ -100,10 +101,12 @@ If you head on over to Connect, you'll notice your `pin` has some useful header 
 
 # Register RStudio Connect
 library(pins)
-board_register("rsconnect", server = "https://yourconnectserver.example.com")
+board_register("rsconnect", 
+ server = "https://yourconnectserver.example.com")
 
 # Retrieve Pin
-your_data <- pin_get("yourdata", board = "rsconnect")
+your_data <- pin_get("yourdata", 
+                     board = "rsconnect")
 
 #Check out the pin
 head(your_data)
@@ -126,8 +129,4 @@ Go try `pins` on your own!
 We also have a ton of resources available for `pins` right at the `pins` website here: <http://pins.rstudio.com/>. Check out the source code here <https://github.com/rstudio/pins>. Any issues? Let us know here: <https://github.com/rstudio/pins/issues>. 
 
 Last but not least, let us know how you get on with pins! Get in touch with the Customer Success team at <sales@rstudio.com>.
-
-
-
-
 

@@ -1,5 +1,5 @@
 ---
-title: "example_pins"
+title: "Example: pins usage and deployment"
 author: "Katie Masiello"
 date: "4/23/2020"
 output: html_document
@@ -8,7 +8,16 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+This document is meant to provide a follow-along example of:  
 
+* Creating a pin  
+* Publishing a pin to RStudio Connect 
+* Retrieving a pin from RStudio Connect 
+* Publishing content that references a pin to RStudio Connect  
+
+This was built using `pins` version `r packageVersion("pins")` and is supplemental material to the RStudio Customer Success Pro Tip: Creating Efficient Workflows with `pins`. 
+
+# Prework
 Prior to running this script, ensure you have created an API key from RStudio Connect (see: https://docs.rstudio.com/connect/user/api-keys/) and saved this into your system environment variables with:
 ```{r eval=FALSE}
 # Sys.setenv("RSC_API_KEY" = “key value”) 

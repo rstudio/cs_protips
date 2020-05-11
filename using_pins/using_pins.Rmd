@@ -6,10 +6,10 @@ output:
     includes:
       in_header: template_files/header.tex
   html_document: 
-    css: "template_files/style.css"
+    css: !expr here::here("using_pins/template_files/style.css")
     includes:
-      before_body: template_files/header.html
-      after_body: template_files/footer.html
+      before_body: !expr here::here("using_pins/template_files/header.html")
+      after_body: !expr here::here("using_pins/template_files/footer.html")
 mainfont: Source Sans Pro
 geometry: "left=1cm,right=1cm,top=5.3cm,bottom=3cm"
 classoption:

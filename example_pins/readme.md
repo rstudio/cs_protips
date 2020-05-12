@@ -11,7 +11,7 @@ output:
 
 
 
-# Purpose 
+# Purpose
 This document provides a follow-along example of:  
 
 * Creating a pin on RStudio Connect 

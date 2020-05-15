@@ -28,11 +28,11 @@ knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 * Do you need to redeploy your app every time the supporting data is updated?  
 * Do multiple apps you've created need to call a model that you developed?  
 * Are you saving `.R` or `.RData` objects to be called later?  
+* Are these pieces of content just a few hundred mbs of data?
 
-These types of workflows can slow you down unnecessarily. Data scientists can struggle to share and reuse content; knowing how and where to store resources, especially resources that can't be put into a database, is a persistent problem.  
 <!-- As a data scientist, does your analysis or pipeline to production hit a speed bump because you're emailing csv files and  it’s likely that a recurring challenge is to easily share content with others in your organization. One of the most persistent problems is knowing how and where to store resources, especially resources that can’t be easily put in a database for others to access without needing to email files back and forth - for example model outputs, csv files, and r objects. -->
 
-This is where `pins` come in. Here at RStudio, we developed `pins` to make the process of discovering, caching, and sharing resources simpler, all with the ultimate aim of helping you create efficient data workflows.
+If you answered yes to any of the above, we're excited to tell you about `pins`! Here at RStudio, we developed `pins` to make the process of discovering, caching, and sharing resources simpler, all with the ultimate aim of helping you create efficient data workflows.
 
 If you’re asking your colleagues to download files before running your code, redeploying an entire app just to update the model or data in it, or if many pieces of your content are pointed to the same dataset, you have a use case for `pins`.
 
@@ -122,10 +122,9 @@ You have now `pin`ned and retrieved a `pin`!
 
 At this point, you know what a `pin` is, whether `pins` will be useful for your workflow, and how to get started with your first pin. What next?
 
-If you want more hands-on advice with data you can play with yourself, we have a downloadable example that accompanies this Pro Tip, see: <link to deployed RMD on colorado>
+If you want more hands-on advice with data you can play with yourself, we have a downloadable example that accompanies this Pro Tip with real data, see: <https://github.com/rstudio/CS_protips/blob/master/example_pins/example_pins.Rmd>
 
 Go try `pins` on your own!
-
 We also have a ton of resources available for `pins` right at the `pins` website here: <http://pins.rstudio.com/>. Check out the source code here <https://github.com/rstudio/pins>. Any issues? Let us know here: <https://github.com/rstudio/pins/issues>. 
 
 Last but not least, let us know how you get on with pins! Get in touch with the Customer Success team at <sales@rstudio.com>.

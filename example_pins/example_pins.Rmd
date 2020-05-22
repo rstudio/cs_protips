@@ -11,8 +11,6 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-file.rename(from="example_pins.md", 
-               to="readme.md")
 ```
 
 # Purpose

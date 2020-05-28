@@ -11,8 +11,8 @@ output:
       after_body: "template_files/footer.html"
   pdf_document:
     latex_engine: xelatex
-    includes:
-      in_header: "template_files/header.tex"
+    # includes:
+    #   in_header: "template_files/header.tex"
 geometry: "left=1cm,right=1cm,top=5.3cm,bottom=3cm"
 classoption:
 - twocolumn
@@ -32,7 +32,7 @@ Think about one of your workflows:
 * Do multiple apps you've created need to call a model that you developed?  
 * Are you working with ephemeral data that refreshes frequently?  
 <!-- * Do you need to redeploy your app every time the supporting data is updated?   -->
-* 
+
 
 <!-- As a data scientist, does your analysis or pipeline to production hit a speed bump because you're emailing csv files and  it’s likely that a recurring challenge is to easily share content with others in your organization. One of the most persistent problems is knowing how and where to store resources, especially resources that can’t be easily put in a database for others to access without needing to email files back and forth - for example model outputs, csv files, and r objects. -->
 
@@ -53,6 +53,7 @@ To pin to Connect, review these requirements:
 
 1. Be a Publisher or Administrator role on your Connect server 
 1. Be running RStudio Connect v 1.7.8 or higher.^[Talk to your R Admin and refer to https://docs.rstudio.com/connect/admin/server-management/#upgrading if you are at an earlier version]
+1. `pins` version 0.4.0
 
 
 # Walk me through my first `pin`

@@ -1,0 +1,12 @@
+name: example_pins-deleteme
+title: example_pins-deleteme
+username: katie
+account: katie
+server: colorado.rstudio.com
+hostUrl: https://colorado.rstudio.com/rsc/__api__
+appId: 6401
+bundleId: 37867
+url: https://colorado.rstudio.com/rsc/content/6401/
+when: 1590159036.4279
+asMultiple: FALSE
+asStatic: FALSE

@@ -11,8 +11,8 @@ output:
       after_body: "template_files/footer.html"
   pdf_document:
     latex_engine: xelatex
-    includes:
-      in_header: "template_files/header.tex"
+    # includes:
+    #   in_header: "template_files/header.tex"
 geometry: "left=1cm,right=1cm,top=5.3cm,bottom=3cm"
 classoption:
 - twocolumn

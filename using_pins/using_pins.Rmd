@@ -73,7 +73,7 @@ Before you can get down to business, you'll need to:
 1. Create an API key from RStudio Connect.^[It's not hard.  See: https://docs.rstudio.com/connect/user/api-keys/] Give this key any name you like, such as `CONNECT_API_KEY` and be certain to copy the value to your clipboard. 
 2. Save your API key as a system environment variable in your RStudio IDE.^[API keys are unique means of identifying you as a user to a system -- in this case when we use this key, it is to tell Connect who you are so you have permission to publish] Example: `Sys.setenv("CONNECT_API_KEY" = "key value that you copied to your clipboard in Step 1")`  Note, saving your key as a system environment variable is a best practice.  This lets you call your key without explicitly hard coding the value into your scripts. 
 3. For convenience, save your RStudio Connect server address as a system environment variable as well. Example: `Sys.setenv("CONNECT_SERVER" = "https://your-server-address.com/")`
-4. 
+4. Kelly's useful warning message
 5. Install the `pins` package.  Example: `install.packages("pins")`
 
 That's all you need to get started!

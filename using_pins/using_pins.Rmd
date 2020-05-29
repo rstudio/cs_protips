@@ -1,18 +1,18 @@
 ---
 title: "Creating Efficient Workflows with `pins`"
 output:
-  html_document:
-    toc: true
-    toc_float: true
-    css: "template_files/style.css"
-    includes:
-      #to knit locally, change path to using_pins/template_files
-      in_header: "template_files/header.html"
-      after_body: "template_files/footer.html"
   pdf_document:
     latex_engine: xelatex
     includes:
-      in_header: "template_files/header.tex"
+      in_header: "using_pins/template_files/header.tex"
+  html_document:
+    toc: true
+    toc_float: true
+    css: "using_pins/template_files/style.css"
+    includes:
+      #to knit locally, change path to using_pins/template_files
+      in_header: "using_pins/template_files/header.html"
+      after_body: "using_pins/template_files/footer.html"
 geometry: "left=1cm,right=1cm,top=5.3cm,bottom=3cm"
 classoption:
 - twocolumn
@@ -41,16 +41,11 @@ If you answered yes to any of the above, you've got a solid use case for `pins`!
 # What are `pins`?
 `pins` are pretty much what they sound like: they’re a way to store and then remotely access R and Python objects, just like you’d pin a note (or a photo of your BFF) to a (virtual) cork board.  The cork board can be on RStudio Connect, S3, Google Cloud, or even your website, to name a few.
 
-The best candidates for `pins` are:
-* typically a few hundred megabytes in size
-* frequently refreshed
-* called from multiple apps 
+Got an idea for an asset that might make a great `pin`? Typically,`pins` are just a few hundred megabytes in size, lightweight or ephemeral data, or are for things relied on by multiple assets. 
 
 Once you’ve `pin`ned a resource, other folks can discover them. This is great for two reasons: first, `pins` on sites like Kaggle let you search well-known data repositories that are guaranteed to contain datasets, instead of searching on the internet and hoping to find what you need. Secondly, `pins` also enhance the discoverability of internally-created datasets with the same access controls you're accustomed to for any content published to Connect, which is great for sharing data and learning more about what your colleagues are up to.
 
-In the next section, you’ll learn how to `pin` your first resource to RStudio Connect. From there, you can check out this website <https://pins.rstudio.com> for further inspiration on how to use `pins` to make your day-to-day life as a data scientist easier.
-
-
+In the next section, you’ll learn how to `pin` your first resource to RStudio Connect.
 
 # Requirements
 To `pin` to Connect, make sure you match these requirements: 
@@ -70,10 +65,9 @@ Let’s walk through each step using RStudio Connect as an example.
 Before you can get down to business, you'll need to:  
 
 1. Create an API key from RStudio Connect.^[It's not hard.  See: https://docs.rstudio.com/connect/user/api-keys/] Give this key any name you like, such as `CONNECT_API_KEY` and be certain to copy the value to your clipboard. 
-2. Save your API key as a system environment variable in your RStudio IDE.^[API keys are unique means of identifying you as a user to a system -- in this case when we use this key, it is to tell Connect who you are so you have permission to publish] Example: `Sys.setenv("CONNECT_API_KEY" = "key value that you copied to your clipboard in Step 1")`  Note, saving your key as a system environment variable is a best practice.  This lets you call your key without explicitly hard coding the value into your scripts. 
+2. Save your API key as a system environment variable in your RStudio IDE in your .Renviron file.^[API keys are unique means of identifying you as a user to a system -- in this case when we use this key, it is to tell Connect who you are so you have permission to publish] Example: `Sys.setenv("CONNECT_API_KEY" = "key value that you copied to your clipboard in Step 1")`  Note, saving your key as a system environment variable is a best practice.  This lets you call your key without explicitly hard coding the value into your scripts. It's also a good idea to put it in your .gitignore file to ensure you're not publishing it to GitHub.
 3. For convenience, save your RStudio Connect server address as a system environment variable as well. Example: `Sys.setenv("CONNECT_SERVER" = "https://your-server-address.com/")`
-
-4. Tell R how to explain what happens when you get an error message:
+4. Tell knittr to exit the knitting process if these environment variables don't exist by placing this code at the top of your document. This will save you from getting scary error messages that will stop your content from deploying or rendering altogether. It's not necessary, but it will be helpful later on.
 ``` { r warning}
 knitr::opts_chunk$set(echo = TRUE)
 if(Sys.getenv('CONNECT_SERVER') == '') { "<h4>ERROR: You must set the CONNECT_SERVER environment variable</h4>\n" }
@@ -125,14 +119,13 @@ your_data <- pin_get("yourdata",
 head(your_data)
 ```
 
-The first time you publish content that calls a `pin`, it will fail saying "[Connect] Message: 'Invalid API key, the API key is empty.'" This is just because there is no key on the environment variable on Connect.  All you need to do is to put CONNECT_API_KEY in environment variables and refresh. 
+The first time you publish content that calls a `pin`, bear in mind that your environmnet variables will not be set on the Connect server. If you used the Friendly Fail message above, your content will deploy and you'll just see the custom friendly error message saying "You must set the CONNECT_API_KEY environment variable." If you don't use the Friendly Fail, you will get a message saying "[Connect] Message: 'Invalid API key, the API key is empty.'" 
+
+Regardless, it's easy to take the next necessary step: put CONNECT_API_KEY in environment variables in Connect and refresh. 
 
 That environment variable that you specify doesn't have to be the same API key that you created when you created a `pin` - for example, User A might create the pin, and User B might download it. The API keys are different per user, and are just a way of telling Connect that you're allowed to `pin` resources.
 
 You have now `pin`ned and retrieved a `pin`!
-
-# Novel workflows to consider
-Here's where we should put the part about not having to redeploy your Shiny app every time.
 
 # Where do I go for help? 
 

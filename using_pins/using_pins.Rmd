@@ -4,15 +4,15 @@ output:
   pdf_document:
     latex_engine: xelatex
     includes:
-      in_header: "using_pins/template_files/header.tex"
+      in_header: "template_files/header.tex"
   html_document:
     toc: true
     toc_float: true
-    css: "using_pins/template_files/style.css"
+    css: "template_files/style.css"
     includes:
       #to knit locally, change path to using_pins/template_files
-      in_header: "using_pins/template_files/header.html"
-      after_body: "using_pins/template_files/footer.html"
+      in_header: "template_files/header.html"
+      after_body: "template_files/footer.html"
 geometry: "left=1cm,right=1cm,top=5.3cm,bottom=3cm"
 classoption:
 - twocolumn

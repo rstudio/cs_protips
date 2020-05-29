@@ -26,8 +26,6 @@ knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 <!-- # Why You Should Use Pins -->
 Creating and sustaining a finished analysis or a data product in production often requires supporting artifacts.  Whether those artifacts are data, a model, a plot, or any other object, the way we integrate those artifacts into our workflow can make the difference between a streamlined process and one with bumps or stall outs along the road.  Like that one piece of furniture in your living room that you _need_, but you just can't find a good place to stick it, sometimes the our supporting objects just don't have a logical home.  
 
-When these pieces of content are a few hundred MB of data or less; not hefty or durable enough to live in a database, but it's got to go _somewhere_, then it's time to consider `pins`. 
-
 Think about one of your workflows:  
 
 * Are you using `read.csv()` to bring in a data file that your colleague emails to you after every update? 
@@ -50,15 +48,15 @@ The best candidates for `pins` are:
 
 Once you’ve `pin`ned a resource, other folks can discover them. This is great for two reasons: first, `pins` on sites like Kaggle let you search well-known data repositories that are guaranteed to contain datasets, instead of searching on the internet and hoping to find what you need. Secondly, `pins` also enhance the discoverability of internally-created datasets with the same access controls you're accustomed to for any content published to Connect, which is great for sharing data and learning more about what your colleagues are up to.
 
-In the next section, you’ll learn how to pin your first resource to RStudio Connect. From there, you can check out this website <https://pins.rstudio.com> for further inspiration on how to use `pins` to make your day-to-day life easier.
+In the next section, you’ll learn how to `pin` your first resource to RStudio Connect. From there, you can check out this website <https://pins.rstudio.com> for further inspiration on how to use `pins` to make your day-to-day life as a data scientist easier.
 
 <!-- The use cases are too many to count, so in the next section, you’ll learn how to pin your first resource using RStudio Connect. From there, you can check out this website for further inspiration on how to use Pins to make your day-to-day life easier. -->
 
 # Requirements
-To `pin` to Connect, review these requirements: 
+To `pin` to Connect, make sure you match these requirements: 
 
 1. Be a Publisher or Administrator role on your Connect server 
-1. Be running RStudio Connect v 1.7.8 or higher.^[Talk to your R Admin and refer to https://docs.rstudio.com/connect/admin/server-management/#upgrading if you are at an earlier version]
+1. Be running RStudio Connect v 1.7.8 or higher.^[ If you're not yet at this version but are keen to get started with `pins`, talk to your R Admin and refer to https://docs.rstudio.com/connect/admin/server-management/#upgrading if you are at an earlier version]
 
 
 # Walk me through my first `pin`
@@ -67,7 +65,7 @@ You can think of this process in four main steps: First, there is some prep work
 
 Let’s walk through each step using RStudio Connect as an example.
 
-## Prework  
+## Prework   
 Before you can get down to business, you'll need to:  
 
 1. Create an API key from RStudio Connect.^[It's not hard.  See: https://docs.rstudio.com/connect/user/api-keys/] Give this key any name you like, such as `CONNECT_API_KEY` and be certain to copy the value to your clipboard. 
@@ -109,9 +107,7 @@ pin(my_data, #your object
 The `name` argument will be the name of the content when deployed on Connect.  The `description` should help you and others know what the pin is.  
 
 ## Retriving a `pin`
-And now for the fourth, step, you can retrieve a `pin`.
-
-Data science is all about sharing your findings with others, so let's get into how you can do this with `pins`.
+And now for the fourth step, you can retrieve a `pin`.
 
 If you head on over to Connect, you'll notice your `pin` has some useful header information. You can copy that code into your analysis, then assign the retrieved `pin` as a variable.
 

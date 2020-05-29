@@ -24,6 +24,7 @@ knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 
 # When your workflow is clunky
 <!-- # Why You Should Use Pins -->
+
 Creating and sustaining a finished analysis or a data product in production often requires supporting artifacts.  Whether those artifacts are data, a model, a plot, or any other object, the way we integrate those artifacts into our workflow can make the difference between a streamlined process and one with bumps or stall outs along the road.  Like that one piece of furniture in your living room that you _need_, but you just can't find a good place to stick it, sometimes the our supporting objects just don't have a logical home.  
 
 When these pieces of content are a few hundred MB of data or less; not hefty or durable enough to live in a database, but it's got to go _somewhere_, then it's time to consider `pins`. 
@@ -33,7 +34,6 @@ Think about one of your workflows:
 * Are you using `read.csv()` to bring in a data file that your colleague emails to you after every update? 
 * Do you work with ephemeral data that frequently has to be updated to use the latest version?
 * Do you need to redeploy your app every time the supporting data is updated?
-
 
 <!-- As a data scientist, does your analysis or pipeline to production hit a speed bump because you're emailing csv files and  it’s likely that a recurring challenge is to easily share content with others in your organization. One of the most persistent problems is knowing how and where to store resources, especially resources that can’t be easily put in a database for others to access without needing to email files back and forth - for example model outputs, csv files, and r objects. -->
 
@@ -52,13 +52,13 @@ Once you’ve `pin`ned a resource, other folks can discover them. This is great 
 
 In the next section, you’ll learn how to pin your first resource to RStudio Connect. From there, you can check out this website <https://pins.rstudio.com> for further inspiration on how to use `pins` to make your day-to-day life easier.
 
-<!-- The use cases are too many to count, so in the next section, you’ll learn how to pin your first resource using RStudio Connect. From there, you can check out this website for further inspiration on how to use Pins to make your day-to-day life easier. -->
+
 
 # Requirements
 To `pin` to Connect, review these requirements: 
 
 1. Be a Publisher or Administrator role on your Connect server 
-1. Be running RStudio Connect v 1.7.8 or higher.^[Talk to your R Admin and refer to https://docs.rstudio.com/connect/admin/server-management/#upgrading if you are at an earlier version]
+2. Be running RStudio Connect v 1.7.8 or higher.^[Talk to your R Admin and refer to https://docs.rstudio.com/connect/admin/server-management/#upgrading if you are at an earlier version]
 
 
 # Walk me through my first `pin`
@@ -73,6 +73,7 @@ Before you can get down to business, you'll need to:
 1. Create an API key from RStudio Connect.^[It's not hard.  See: https://docs.rstudio.com/connect/user/api-keys/] Give this key any name you like, such as `CONNECT_API_KEY` and be certain to copy the value to your clipboard. 
 2. Save your API key as a system environment variable in your RStudio IDE.^[API keys are unique means of identifying you as a user to a system -- in this case when we use this key, it is to tell Connect who you are so you have permission to publish] Example: `Sys.setenv("CONNECT_API_KEY" = "key value that you copied to your clipboard in Step 1")`  Note, saving your key as a system environment variable is a best practice.  This lets you call your key without explicitly hard coding the value into your scripts. 
 3. For convenience, save your RStudio Connect server address as a system environment variable as well. Example: `Sys.setenv("CONNECT_SERVER" = "https://your-server-address.com/")`
+
 4. Tell R how to explain what happens when you get an error message:
 ``` { r warning}
 knitr::opts_chunk$set(echo = TRUE)

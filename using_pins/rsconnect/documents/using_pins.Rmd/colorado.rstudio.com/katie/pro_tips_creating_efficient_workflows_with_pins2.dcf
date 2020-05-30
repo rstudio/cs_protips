@@ -5,8 +5,8 @@ account: katie
 server: colorado.rstudio.com
 hostUrl: https://colorado.rstudio.com/rsc/__api__
 appId: 5944
-bundleId: 36980
-url: https://colorado.rstudio.com/rsc/content/5944/
-when: 1588190621.64281
+bundleId: 38211
+url: https://colorado.rstudio.com/rsc/ProTips-pins/
+when: 1590818109.26934
 asMultiple: FALSE
 asStatic: FALSE

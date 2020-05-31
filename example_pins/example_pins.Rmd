@@ -1,16 +1,16 @@
 ---
-title: "Example: pins usage and deployment"
-author: "Katie Masiello"
-date: "2020-05-11"
+title: "Pins usage and deployment"
 output:
   html_document:
     toc: true
     toc_float: true
-    keep_md: true
 ---
 
-```{r setup, include=FALSE}
+```{r setup}
 knitr::opts_chunk$set(echo = TRUE)
+if(Sys.getenv('CONNECT_SERVER') == '') { "<h4>ERROR: You must set the CONNECT_SERVER environment variable</h4>\n" }
+if(Sys.getenv('CONNECT_API_KEY') == '') { "<h4>ERROR: You must set the CONNECT_API_KEY environment variable</h4>\n" }
+if(Sys.getenv('CONNECT_API_KEY') == '' || Sys.getenv('CONNECT_SERVER') == '') { knitr::knit_exit() }
 ```
 
 # Purpose
@@ -20,117 +20,144 @@ This document provides a follow-along example of:
 * Retrieving a pin from RStudio Connect 
 * Publishing content that uses a pin to RStudio Connect  
 
-# Notes 
-This was built using `pins` version `r packageVersion("pins")` and is supplemental material to the RStudio Customer Success Pro Tip: Creating Efficient Workflows with `pins` at https://colorado.rstudio.com/rsc/ProTips-pins/. 
-
 # Prework
-Prior to beginning, ensure you have  
+Prior to beginning, ensure you:  
 
-1. Created an API key from RStudio Connect (see: https://docs.rstudio.com/connect/user/api-keys/)  
-1. Saved your API key into your system environment variables with `Sys.setenv("RSC_API_KEY" = “key value”)`.  Important: Keep your keys secure! Set your system environment variable using the Console; not as something saved in your script! 
+1. Create an API key from RStudio Connect: [Learn How](https://docs.rstudio.com/connect/user/api-keys/)  
+2. Save your API key as a system environment variable. Example: `Sys.setenv("CONNECT_API_KEY" = "key value")`.
+3. For convenience, save your RStudio Connect server address as a system environment variable as well. Example: `Sys.setenv("CONNECT_SERVER" = "https://your-server-address.com/")`
+
+Important: Keep your API key secure! Set environment variables using the R Console; not as something saved in your script! 
 
 # Creating a pin
 Let's say we are running an important analysis that involves body temperature mesurements of beavers. Let's look at our data first.  
+
 ```{r}
 library(datasets)
 head(beaver1)
 ```
+
 Nice looking data!
 
 Now we want to pin this data to RStudio Connect so it is also accessible to our colleagues for their important work and we don't have to email this around as a csv file.  Let's get started!
 
+## Register the board
+
 First, **register the board** so your session knows that it can place content on your Connect board:
+
 ```{r}
-pins::board_register(
-    "rsconnect", 
-    server = "https://colorado.rstudio.com/rsc", # <- replace this with your server name 
-    key = Sys.getenv("RSC_API_KEY")
-    )
+# Pins will use CONNECT_API_KEY and CONNECT_SERVER by default,
+# but we are being explicit here anyway.
+pins::board_register("rsconnect",
+               key = Sys.getenv("CONNECT_API_KEY"),
+               server = Sys.getenv("CONNECT_SERVER"))
 ```
-  
-  
+
 After running the script above, did you see that the Connections pane in your RStudio IDE now shows the board `rsconnect`?  This gives you an easy way to browse your organization's pinned objects.  Here's what mine looks like:  
   
-```{r, echo=FALSE, out.width = '65%'}
-knitr::include_graphics("connections_pane.png")
+```{r, echo=FALSE, out.width = '65%', out.extra = 'style="background-color: #447099; padding:5px;"'}
+knitr::include_graphics("images/connections_pane.png")
 ```
-   
-Now we want to **pin our data** to Connect. 
+  
+## Pin the data
+ 
+Now we want to **pin our data** to RStudio Connect. 
+
+_Before you run this code chunk_: Update the `name = "mydata"` parameter to give your pin a unique name identifier on the server.
+
 ```{r}
-pins::pin(beaver1, description = "Beaver Body Temperature Measurements", board = "rsconnect")
+pins::pin(beaver1, name = "mybeaverdata", description = "Beaver Body Temperature Measurements", board = "rsconnect")
+
 ```
-  
-   
-Take a moment to switch to Connect and give yourself a pat on the back.  **Your data is now pinned on Connect!**
-```{r, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("pinned_to_connect.png")
+
+Take a moment to switch to the RStudio Connect content dashboard and give yourself a pat on the back. **Your data is now pinned!**
+
+## Visit your new pin
+
+From the dashboard, you can adjust the user access permissions, add collaborators, and even give your pin a custom content URL.
+
+```{r, echo=FALSE, out.width = '100%', out.extra = 'style="background-color: #447099; padding:5px;"'}
+knitr::include_graphics("images/pinned_to_connect.png")
 ```
-  
-From this window in Connect, you can adjust the user access permissions, add collaborators, and even give your pin a custom URL (see mine at https://colorado.rstudio.com/rsc/beaver-data/)  
-```{r, echo=FALSE, out.width = '30%'}
-knitr::include_graphics("pin_access_controls_and_vanityURL.png")
-```
-  
-  
+
 # Retrieving a pin  
 Now let's pretend you're a colleague and you want to access this data for your own analysis.  
 
-Feel free to put on a hat if it helps you to get into character.  At a minimum, you should restart your R session by either going to Session > Restart R, or pressing Shift+Cmd+F10 on your keyboard so we can start from a clean slate.
+Feel free to put on a hat if it helps you to get into character. Keep in mind that your colleague won't have access to your environment with your API key -- this is by design! We don't recommend you share API keys with other people. For someone else to retrieve your pin, two things need to happen:
+
+1. **_You need_** to give them permission by adjusting the **Access Settings** on your Pin in the RStudio Connect content dashboard.
+2. **_They need_** to generate an API key from their own RStudio Connect account, just like you did way back in the **Prework** section. 
   
-Now let's get the dataset from RStudio Connect. 
+Okay, if we imagine that all of those things have taken place, let's get the dataset from RStudio Connect. 
 
-In Connect, did you notice the header information on your pin?  This is present on every pin published to Connect and it provides the code to retrieve your pin in either R or Python.  Handy, huh?  
+In RStudio Connect, did you notice the header information on your pin?  This is present on every pin published to Connect and it provides the code to retrieve your pin in either R or Python.  Handy, huh?  
 
-```{r, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("retrieval_code.png")
+```{r, echo=FALSE, out.width = '100%', out.extra = 'style="background-color: #447099; padding:5px;"'}
+knitr::include_graphics("images/retrieval_code.png")
 ```
-  
-   
-So let's copy that code into our analysis and **retrieve the pin**.  
+
+So let's copy that code into our analysis and **retrieve the pin**. 
+
+Replace the `# Retrieve Pin` code section below with the sample from your own pin:
+
 ```{r}
 # Register RStudio Connect
 library(pins)
-board_register("rsconnect", server = "https://colorado.rstudio.com/rsc",
-    key = Sys.getenv("RSC_API_KEY"))
+pins::board_register("rsconnect",
+               key = Sys.getenv("CONNECT_API_KEY"),
+               server = Sys.getenv("CONNECT_SERVER"))
 
 # Retrieve Pin
-beaver_data <- pin_get("katie/beaver1", board = "rsconnect")
+# beaver_data <- pin_get("your/pin", board = "rsconnect")
+  
+# View the pin locally
+# head(beaver_data)
 ```
-   
-Now if you're paying close attention, you'll see that I also added in the argument for `key` in the `board_register()` function in my code above  If you're strictly calling pinned data for use locally, this isn't necessary.  However, if you're going to deploy your code to Connect (like I am with this document), you'll need to include your API key information so Connect knows who you are.  We'll talk more about this in a moment.  For now, let's get back to those beavers.
-```{r}
-#Check out the pin
-head(beaver_data)
+
+Jackpot! We have our data.
+
+# Using pins in content 
+
+So you think you're hot stuff and off and running?  For now, perhaps.  But let's say you want to publish something to RStudio Connect (like this RMD file), which uses pinned content in it.
+
+## Try publishing
+
+Go ahead, try **publishing this document to your RStudio Connect server** right now. 
+
+Did you just get a big ugly error message?  
+
+```{r, echo=FALSE, out.width = '100%', out.extra = 'style="background-color: #447099; padding:5px;"'}
+knitr::include_graphics("images/env_var_error.png")
+```
+
+Stop cursing! This is one time that an error message is good. You've done everything correctly so far! 
+
+This error is telling us that RStudio Connect can't find the environment variables. 
+
+*"API keys again? I thought this was a `pins` lesson, not an API key lesson!"*  
+
+Yes, so as alluded to in the previous section, we used our API key in the RStudio IDE session so that RStudio Connect could authenticate you acting through the IDE. This time, the `rstudio-connect` user needs an API key to access your pinned content.   
+
+## Recover from the error
+
+In the RStudio Connect content settings panel, select the **Vars** option and **create environment variables for `CONNECT_API_KEY` and `CONNECT_SERVER`** - values will appear in plain text until you hit **Save**.
+
+```{r, echo=FALSE, out.width = '40%', out.extra = 'style="background-color: #447099; padding:5px;"'}
+knitr::include_graphics("images/add_env_vars.png")
 ```
   
-Jackpot!  We have our data.
+Click the **Refresh Report** button to re-render your document with the new environment variables in place.  Hold breath... and... 
 
-# Publishing content that uses a pin 
-So you think you're hot stuff and off and running?  For now, perhaps.  But let's say you want to publish something to Connect (like this RMD file), which uses pinned content in it.  Go ahead, try **publishing this document to your Connect instance** right now. 
-
-Did you just get a ugly, angry, red error message?  
-```{r, echo=FALSE, out.width = '80%'}
-knitr::include_graphics("deployment_error.png")
+```{r, echo=FALSE, out.width = '100%', out.extra = 'style="background-color: #447099; padding:5px;"'}
+knitr::include_graphics("images/deploy_success.png")
 ```
-
-
-Stop cursing! This is one time that an error message is good.  You've done it all right so far! Your error message might look a little different from mine, depending on what version of Connect you have, but the issue is the same.  This error is telling us that Connect can't find an API key.  *"API keys again? I thought this was a `pins` lesson, not an API key lesson!"*  Yes, so as alluded to in the previous section, we used our API key in our RStudio IDE session so that Connect could authenticate you acting through the IDE.  But this time Connect needs to authenticate you acting as a piece of content on Connect asking for access to another piece of content.   
-
-Jump over to Connect and open your sad, un-rendered content.  
-```{r, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("sad_unrendered_content.png")
-```
-  
-Now in the right hand side pane, select the Environment Variables option and **input your API key as an environment variable.**  
-```{r, echo=FALSE, out.width = '20%'}
-knitr::include_graphics("set_env_variable.png")
-```
-  
-Don't forget to click "Save" and then refresh your browser.  Hold breath... and... 
-
-```{r, echo=FALSE, out.width = '100%'}
-knitr::include_graphics("success.png")
-```
-  
 
 Voilà!  Congratulations!  You're a pinning machine. **You've now deployed content that includes references to a pinned object.**
+
+# Learn more about pins 
+
+1. [Read the reference guide on using RStudio Connect Pin Boards](http://pins.rstudio.com/articles/boards-rsconnect.html)
+2. [Find more great how-to guides for Pins like these](http://pins.rstudio.com/articles/use-cases.html):  
+    - [Automate Dataset Updates](http://pins.rstudio.com/articles/use-cases/automate-dataset-updates.html)
+    - [Create Data Pipelines](http://pins.rstudio.com/articles/use-cases/create-data-pipelines.html)
+    - [Update Plumber and Shiny Apps](http://pins.rstudio.com/articles/use-cases/update-plumber-and-shiny-apps.html)

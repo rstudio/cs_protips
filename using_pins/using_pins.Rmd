@@ -1,20 +1,18 @@
 ---
 title: "Creating Efficient Workflows with `pins`"
 output:
+  pdf_document:
+    latex_engine: xelatex
+    includes:
+      in_header: "template_files/header.tex"
   html_document:
     toc: true
     toc_float: true
     highlight: pygments
     # css: "template_files/style.css"
     includes:
-      #to knit locally, change path to using_pins/template_files
       in_header: "template_files/header.html"
       after_body: "template_files/footer.html"
-  pdf_document:
-    latex_engine: xelatex
-    highlight: pygments
-    includes:
-      in_header: "template_files/header.tex"
 geometry: "left=1cm,right=1cm,top=5.3cm,bottom=3cm"
 classoption:
 - twocolumn
@@ -23,7 +21,7 @@ classoption:
 knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 ```
 
-# When your workflow is clunky
+# When your Workflow is Clunky
 A finished analysis or a data product in production often requires supporting artifacts.  Whether those artifacts are data, a model, a plot, or any other object, the way we integrate those artifacts into our workflow can make the difference between a streamlined process and one that is clunky.  Like that one piece of furniture in your living room that you _need_, but you just can't find a good place to stick it, sometimes we struggle to find a logical home for these artifacts.  
 
 Think about some of your workflows.  Are you:  
@@ -42,7 +40,9 @@ Got an idea for an asset that might make a great `pin`? `pins` are best suited f
 
 Once you’ve pinned a resource, other folks can discover them. This is great for two reasons:  First, `pins` on sites like Kaggle let you search well-known data repositories that are guaranteed to contain datasets, instead of searching on the internet and hoping to find what you need. Second, `pins` also enhance the discoverability of internally-created datasets with the same access controls you're accustomed to for any content published to Connect, which is great for sharing data and learning more about what your colleagues are up to.
 
-In this Pro Tip, you’ll learn how to `pin` your first resource to RStudio Connect, how to retrieve a `pin`, and how to deploy an asset to Connect that includes a `pin` as a supporting artifact.  For hands-on advice for each step in this process, follow along with a downloadable example that accompanies this Pro Tip with real data, see: <https://github.com/rstudio/CS_protips/blob/master/example_pins/example_pins.Rmd>
+In this Pro Tip, you’ll learn how to `pin` your first resource to RStudio Connect, how to retrieve a `pin`, and how to deploy an asset to Connect that includes a `pin` as a supporting artifact.  
+
+**For hands-on advice for each step in this process, follow along with a complete example with real data that accompanies this Pro Tip: <https://github.com/rstudio/CS_protips/blob/master/example_pins/example_pins.Rmd>**
 
 # Requirements
 To utilize `pins` with Connect make sure you: 
@@ -97,10 +97,9 @@ With those two commands, you've pinned your first asset.  Congratulations! Be su
 # Retrieving a `pin` from RStudio Connect  
 If you head over to Connect, you'll notice your `pin` has some useful header information for pin retrieval. So let's copy that code into our analysis and **retrieve the pin**. 
 
-Replace the `# Retrieve Pin` code section below with the sample from your own pin:
+Replace the `# Retrieve pin` code section below with the sample from your own pin:
 
 ``` {r}
-
 # Register RStudio Connect
 pins::board_register("rsconnect",
                key = Sys.getenv("CONNECT_API_KEY"),
@@ -113,13 +112,19 @@ my_data <- pin_get("your/pin", board = "rsconnect")
 head(my_data)
 ```
 
-
 # Include `pins` in a Deployed Asset
 `pins` shine when they are a part of a workflow or pipeline supporting an app, model, or report.  The last step in `pin` mastery is to deploy an asset to RStudio Connect that uses a `pin`. Heads up: this section is less about `pins` and more about environment variables, but you'll be a master of both by the time we are through.
 
-Use your new `pin` creating and retrieving skills to call a pinned object to your content of choice to deploy to Connect. If you got antsy and tried to deploy this content before reading this section, you likely got a failure to deploy and/or very angry looking error message. This is because the environment variables in your code (recall: `CONNECT_API_KEY` and `CONNECT_SERVER` from above) are not saved on the Connect server; they're only sitting in your .Rprofile in the RStudio IDE. The specific error and where it presents may vary depending on they type of asset you're trying to deploy (R Markdown, Shiny, plumber API, etc.)  
+Use your new `pin` creating and retrieving skills to call a pinned object to your content of choice to deploy to Connect. Now try to deploy your content - don't be surprised if you got a failure to deploy and/or very angry looking error message. This is because the environment variables in your code (recall: `CONNECT_API_KEY` and `CONNECT_SERVER` from above) are not saved on the Connect server; they're only sitting in your .Rprofile in the RStudio IDE. The specific error and where it presents may vary depending on they type of asset you're trying to deploy (R Markdown, Shiny, plumber API, etc.), but the punchline is the same.  
 
-If you're trying to deploy a R Markdown document, make life a little friendlier for future you and any colleague that might be running your code. **Insert the following code at the top of any R Markdown document that will be deployed with a pin:** 
+Regardless of where and how your error presents, it's easy to address: In the RStudio Connect content settings panel for the asset you are trying to deploy, select the **Vars** option and **create environment variables for `CONNECT_API_KEY` and `CONNECT_SERVER`** - values will appear in plain text until you hit **Save**.
+
+That environment variable that you specify doesn't have to be the same API key that was used when the pin was created - for example, User A might create the pin, and User B might pull it into a Shiny app.  API keys are different per user, and are just a way of telling Connect that you're allowed to `pin` resources.
+
+Click the **Refresh Report** button to re-render your document with the new environment variables in place. Then, go ahead... do a little dance to celebrate!  You've published an asset that calls a pin!
+
+## A Special Tip for R Markdown Deployments
+If you're trying to deploy a R Markdown document that calls a pin (or more generally, uses environment variables), make life a little friendlier for future you and any colleague that might be running your code. **Insert the following code at the top of any R Markdown document that includes environment variables that will be deployed to Connect:** 
 
 ```{r check for system environment variables}
 # Check for system environment variables
@@ -135,15 +140,9 @@ if(Sys.getenv('CONNECT_API_KEY') == '' ||
   { knitr::knit_exit() }
 ```
 
-The code above will tell `knitr` to stop at that point in the rendering and exit the knitting process if these environment variables don't exist. By placing this code at the top of your document, you'll have a friendly reminder to set your missing environment variables. 
+The code above will tell `knitr` to stop at that point in the rendering and exit the knitting process if these environment variables don't exist. By placing this code at the top of your document, you'll have a friendly reminder to set your missing environment variables rather than a red and angry failed deployment message. 
 
-Regardless of where and how your error presents, it's easy to address: In the RStudio Connect content settings panel, select the **Vars** option and **create environment variables for `CONNECT_API_KEY` and `CONNECT_SERVER`** - values will appear in plain text until you hit **Save**.
-
-That environment variable that you specify doesn't have to be the same API key that was used when the pin was created - for example, User A might create the pin, and User B might pull it into a Shiny app.  API keys are different per user, and are just a way of telling Connect that you're allowed to `pin` resources.
-
-Click the **Refresh Report** button to re-render your document with the new environment variables in place. Then, go ahead... do a little dance to celebrate! 
-
-# Where do I go from here? 
+# Where do I go From Here? 
 
 At this point, you know what a `pin` is, whether `pins` will be useful for your workflow, and all the basic steps for working with `pins`. What next?
 

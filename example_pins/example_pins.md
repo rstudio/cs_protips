@@ -21,11 +21,16 @@ This document provides a follow-along example of:
 # Notes 
 This was built using `pins` version 0.4.0 and is supplemental material to the RStudio Customer Success Pro Tip: Creating Efficient Workflows with `pins` at https://colorado.rstudio.com/rsc/ProTips-pins/. 
 
-# Prework
-Prior to beginning, ensure you have  
+# Prework: API Keys    
+API keys will let the RStudio IDE communicate with Connect on our behalf, acting as our credentials.  The steps below will save your credentials for future work, so these are one-time only steps:  
 
-1. Created an API key from RStudio Connect (see: https://docs.rstudio.com/connect/user/api-keys/)  
-1. Saved your API key into your system environment variables with `Sys.setenv("RSC_API_KEY" = “key value”)`.  Important: Keep your keys secure! Set your system environment variable using the Console; not as something saved in your script! 
+1. Create an API key from RStudio Connect (See: https://docs.rstudio.com/connect/user/api-keys/) Give this key any name you like, such as `CONNECT_API_KEY` and be certain to copy the value to your clipboard. 
+1. Return to the RStudio IDE and save your API key as a system environment variable in your .Rprofile file:  
+    a. In the Console, enter `usethis::edit_r_profile()` to open your .Rprofile for editing.
+    a. In the .RProfile file, insert `Sys.setenv("CONNECT_API_KEY" = "key value from your clipboard")`.
+1. For convenience, save your RStudio Connect server address as a system environment variable in your .RProfile as well. Example: `Sys.setenv("CONNECT_SERVER" = "https://your-server-address.com/")`
+1. Save and close the file. 
+1. Restart R (shift + cmd + F10)
 
 # Creating a pin
 Let's say we are running an important analysis that involves body temperature mesurements of beavers. Let's look at our data first.  
@@ -33,16 +38,6 @@ Let's say we are running an important analysis that involves body temperature me
 ```r
 library(datasets)
 head(beaver1)
-```
-
-```
-##   day time  temp activ
-## 1 346  840 36.33     0
-## 2 346  850 36.34     0
-## 3 346  900 36.35     0
-## 4 346  910 36.42     0
-## 5 346  920 36.55     0
-## 6 346  930 36.69     0
 ```
 Nice looking data!
 
@@ -61,20 +56,20 @@ pins::board_register(
   
 After running the script above, did you see that the Connections pane in your RStudio IDE now shows the board `rsconnect`?  This gives you an easy way to browse your organization's pinned objects.  Here's what mine looks like:  
   
-<img src="connections_pane.png" width="65%" />
+
    
 Now we want to **pin our data** to Connect. 
 
 ```r
-pins::pin(beaver1, name="mybeavers-test", description = "Beaver Body Temperature Measurements", board = "rsconnect")
+pins::pin(beaver1, description = "Beaver Body Temperature Measurements", board = "rsconnect")
 ```
   
    
 Take a moment to switch to Connect and give yourself a pat on the back.  **Your data is now pinned on Connect!**
-<img src="pinned_to_connect.png" width="100%" />
+
   
 From this window in Connect, you can adjust the user access permissions, add collaborators, and even give your pin a custom URL (see mine at https://colorado.rstudio.com/rsc/beaver-data/)  
-<img src="pin_access_controls_and_vanityURL.png" width="30%" />
+
   
   
 # Retrieving a pin  
@@ -86,7 +81,7 @@ Now let's get the dataset from RStudio Connect.
 
 In Connect, did you notice the header information on your pin?  This is present on every pin published to Connect and it provides the code to retrieve your pin in either R or Python.  Handy, huh?  
 
-<img src="retrieval_code.png" width="100%" />
+
   
    
 So let's copy that code into our analysis and **retrieve the pin**.  
@@ -107,18 +102,6 @@ Now if you're paying close attention, you'll see that I also added in the argume
 #Check out the pin
 head(beaver_data)
 ```
-
-```
-## # A tibble: 6 x 4
-##     day  time  temp activ
-##   <dbl> <dbl> <dbl> <dbl>
-## 1   346   840  36.3     0
-## 2   346   850  36.3     0
-## 3   346   900  36.4     0
-## 4   346   910  36.4     0
-## 5   346   920  36.6     0
-## 6   346   930  36.7     0
-```
   
 Jackpot!  We have our data.
 
@@ -126,20 +109,20 @@ Jackpot!  We have our data.
 So you think you're hot stuff and off and running?  For now, perhaps.  But let's say you want to publish something to Connect (like this RMD file), which uses pinned content in it.  Go ahead, try **publishing this document to your Connect instance** right now. 
 
 Did you just get a ugly, angry, red error message?  
-<img src="deployment_error.png" width="80%" />
+
 
 
 Stop cursing! This is one time that an error message is good.  You've done it all right so far! Your error message might look a little different from mine, depending on what version of Connect you have, but the issue is the same.  This error is telling us that Connect can't find an API key.  *"API keys again? I thought this was a `pins` lesson, not an API key lesson!"*  Yes, so as alluded to in the previous section, we used our API key in our RStudio IDE session so that Connect could authenticate you acting through the IDE.  But this time Connect needs to authenticate you acting as a piece of content on Connect asking for access to another piece of content.   
 
 Jump over to Connect and open your sad, un-rendered content.  
-<img src="sad_unrendered_content.png" width="100%" />
+
   
 Now in the right hand side pane, select the Environment Variables option and **input your API key as an environment variable.**  
-<img src="set_env_variable.png" width="20%" />
+
   
 Don't forget to click "Save" and then refresh your browser.  Hold breath... and... 
 
-<img src="success.png" width="100%" />
+
   
 
 Voilà!  Congratulations!  You're a pinning machine. **You've now deployed content that includes references to a pinned object.**

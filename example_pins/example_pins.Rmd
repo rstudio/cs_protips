@@ -20,17 +20,9 @@ This document provides a follow-along example of:
 * Retrieving a pin from RStudio Connect 
 * Publishing content that uses a pin to RStudio Connect  
 
-<<<<<<< Updated upstream
-# Prework
-Prior to beginning, ensure you:  
 
-1. Create an API key from RStudio Connect: [Learn How](https://docs.rstudio.com/connect/user/api-keys/)  
-2. Save your API key as a system environment variable. Example: `Sys.setenv("CONNECT_API_KEY" = "key value")`.
-3. For convenience, save your RStudio Connect server address as a system environment variable as well. Example: `Sys.setenv("CONNECT_SERVER" = "https://your-server-address.com/")`
-
-Important: Keep your API key secure! Set environment variables using the R Console; not as something saved in your script! 
-=======
 # Notes 
+<span style="color: red;">Kelly removed this. Should this be included?</span>
 This was built using `pins` version `r packageVersion("pins")` and is supplemental material to the RStudio Customer Success Pro Tip: Creating Efficient Workflows with `pins` at https://colorado.rstudio.com/rsc/ProTips-pins/. 
 
 # Prework: API Keys    
@@ -43,7 +35,6 @@ API keys will let the RStudio IDE communicate with Connect on our behalf, acting
 1. For convenience, save your RStudio Connect server address as a system environment variable in your .RProfile as well. Example: `Sys.setenv("CONNECT_SERVER" = "https://your-server-address.com/")`
 1. Save and close the file. 
 1. Restart R (shift + cmd + F10)
->>>>>>> Stashed changes
 
 # Creating a pin
 Let's say we are running an important analysis that involves body temperature mesurements of beavers. Let's look at our data first.  
@@ -57,26 +48,13 @@ Nice looking data!
 
 Now we want to pin this data to RStudio Connect so it is also accessible to our colleagues for their important work and we won't have to email this around as a csv file.  Let's get started!
 
-<<<<<<< Updated upstream
-## Register the board
-
-First, **register the board** so your session knows that it can place content on your Connect board:
-
-```{r}
-# Pins will use CONNECT_API_KEY and CONNECT_SERVER by default,
-# but we are being explicit here anyway.
-pins::board_register("rsconnect",
-               key = Sys.getenv("CONNECT_API_KEY"),
-               server = Sys.getenv("CONNECT_SERVER"))
-=======
 First, **register the board**.  Registering just means you're identifying a location where you can store resources.  The RStudio IDE is registering, or recognizing, that it can place content on your Connect board:
 ```{r}
 pins::board_register(
     "rsconnect", 
-    server = "CONNECT_SERVER",  
+    server = Sys.getenv("CONNECT_SERVER"),  
     key = Sys.getenv("CONNECT_API_KEY")
     )
->>>>>>> Stashed changes
 ```
 
 After running the script above, did you see that the Connections pane in your RStudio IDE now shows the board `rsconnect`?  This gives you an easy way to browse your organization's pinned objects.  Here's what mine looks like:  
@@ -92,7 +70,7 @@ Now we want to **pin our data** to RStudio Connect.
 _Before you run this code chunk_: Update the `name = "mydata"` parameter to give your pin a unique name identifier on the server.
 
 ```{r}
-pins::pin(beaver1, name = "mybeaverdata", description = "Beaver Body Temperature Measurements", board = "rsconnect")
+pins::pin(beaver1, name = "morebeaverdata", description = "Beaver Body Temperature Measurements", board = "rsconnect")
 
 ```
 

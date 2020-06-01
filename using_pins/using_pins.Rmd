@@ -1,10 +1,6 @@
 ---
 title: "Creating Efficient Workflows with `pins`"
 output:
-  pdf_document:
-    latex_engine: xelatex
-    includes:
-      in_header: "template_files/header.tex"
   html_document:
     toc: true
     toc_float: true
@@ -13,6 +9,10 @@ output:
     includes:
       in_header: "template_files/header.html"
       after_body: "template_files/footer.html"
+  pdf_document:
+    latex_engine: xelatex
+    includes:
+      in_header: "template_files/header.tex"
 geometry: "left=1cm,right=1cm,top=5.3cm,bottom=3cm"
 classoption:
 - twocolumn
@@ -75,7 +75,7 @@ The first step in using `pins` is to "Register" the board. This means you're ide
 #Register RStudio Connect
 pins::board_register(
     "rsconnect", 
-    server = "CONNECT_SERVER", 
+    server = Sys.getenv("CONNECT_SERVER"), 
     key = Sys.getenv("CONNECT_API_KEY")
     )
 ```

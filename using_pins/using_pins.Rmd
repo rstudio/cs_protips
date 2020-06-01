@@ -48,7 +48,6 @@ In this Pro Tip, you’ll learn how to `pin` your first resource to RStudio Conn
 To utilize `pins` with Connect make sure you: 
 
 1. Are a Publisher or Administrator on your Connect server.^[You can retrieve a `pin` with only a Viewer role]
-
 1. Have RStudio Connect v 1.7.8 or higher.^[If you're not yet at this version but are keen to get started with `pins`, talk to your R Admin and refer to https://docs.rstudio.com/connect/admin/server-management/#upgrading]
 
 # Prework: API Keys    

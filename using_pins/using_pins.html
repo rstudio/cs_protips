@@ -1575,117 +1575,113 @@ div.tocify {
 
 <div id="when-your-workflow-is-clunky" class="section level1">
 <h1>When your Workflow is Clunky</h1>
-<p>A finished analysis or a data product in production often requires supporting artifacts. Whether those artifacts are data, a model, a plot, or any other object, the way we integrate those artifacts into our workflow can make the difference between a streamlined process and one that is clunky. Like that one piece of furniture in your living room that you <em>need</em>, but you just can’t find a good place to stick it, sometimes we struggle to find a logical home for these artifacts.</p>
-<p>Think about some of your workflows. Are you:</p>
+
+<p>Like that one piece of furniture in your living room that you <em>need</em>, but you just can’t find a spot for, we often struggle to find a home for the mid-process artifacts of a data analysis.</p>
+<p>Think about some of your workflows. Are you:<br />
+</p>
 <ul>
 <li>Using <code>read.csv()</code> to bring in data that is emailed to you after every update?</li>
-<li>Saving <code>.R</code> or <code>.RData</code> objects to be called later?</li>
+<li>Saving <code>.Rds</code> or <code>.RData</code> objects to be called later?</li>
 <li>Sharing your model or data across multiple apps?</li>
-<li>Redeploying your app every time the supporting data is updated?</li>
+<li>Redeploying your app every time the supporting data is updated? </li>
 </ul>
-<p>If you answered yes to any of the above, you’ve got a solid use case for <code>pins</code>! Here at RStudio, we developed <code>pins</code> to make the process of discovering, caching, and sharing resources simpler, all with the ultimate aim of helping you create efficient data workflows.</p>
+<p>A “yes” to any of the above indicates a solid use case for <code>pins</code>! Here at RStudio, we developed <code>pins</code> to make discovering, caching, and sharing resources simpler, all to promote efficient data workflows.<br />
+</p>
 </div>
 <div id="what-are-pins" class="section level1">
-<h1>What are <code>pins</code>?</h1>
-<p><code>pins</code> are pretty much what they sound like: just like you’d pin a note (or a photo of your BFF) to a physical cork board, pin an R or Python object to virtual board so that you and others can share and access that object. The cork board can be on RStudio Connect, S3, Google Cloud, or even your website, to name a few.</p>
-<p>Got an idea for an asset that might make a great <code>pin</code>? <code>pins</code> are best suited for objects that are just a few hundred megabytes in size. Often they are made of lightweight or ephemeral data, and they may be relied upon by multiple assets.</p>
-<p>Once you’ve pinned a resource, other folks can discover them. This is great for two reasons: First, <code>pins</code> on sites like Kaggle let you search well-known data repositories that are guaranteed to contain datasets, instead of searching on the internet and hoping to find what you need. Second, <code>pins</code> also enhance the discoverability of internally-created datasets with the same access controls you’re accustomed to for any content published to Connect, which is great for sharing data and learning more about what your colleagues are up to.</p>
-<p>In this Pro Tip, you’ll learn how to <code>pin</code> your first resource to RStudio Connect, how to retrieve a <code>pin</code>, and how to deploy an asset to Connect that includes a <code>pin</code> as a supporting artifact.</p>
-<p><strong>For hands-on advice for each step in this process, follow along with a complete example with real data that accompanies this Pro Tip: <a href="https://github.com/rstudio/CS_protips/blob/master/example_pins/example_pins.Rmd" class="uri">https://github.com/rstudio/CS_protips/blob/master/example_pins/example_pins.Rmd</a></strong></p>
+<h1>What are Pins?</h1>
+
+<p>Just like you’d pin a note (or a photo of your BFF) to a physical cork board, <code>pins</code> lets you pin an R or Python object to virtual board where you and others access it. The virtual board can be on RStudio Connect, S3, Google Cloud, or even your website, to name a few.</p>
+<p>Pins are best suited for objects around a few hundred megabytes. Often they’re made of lightweight or ephemeral data, and they may be relied upon by multiple assets.</p>
+<p>Once pinned, it’s much easier to share internal datasets across multiple assets or across your team. If you’re using RStudio Connect, you can be sure that only the right people can access your pins with the RStudio Connect access controls you’re already used to.</p>
+<p>In this Pro Tip, you’ll learn how to pin and retrieve a resource on RStudio Connect and how to schedule updates to pins so downstream analyses always stay current without re-deployment.</p>
+<p><strong>For a follow-along accompaniment to this Pro Tip with real data see: <a href="https://github.com/rstudio/CS_protips/blob/master/example_pins/" class="uri">https://github.com/rstudio/CS_protips/blob/master/example_pins/</a></strong><br />
+<!-- \vspace{-8truemm} --></p>
 </div>
 <div id="requirements" class="section level1">
 <h1>Requirements</h1>
-<p>To utilize <code>pins</code> with Connect make sure you:</p>
+
+<p>To utilize <code>pins</code> with Connect make sure you: </p>
 <ol style="list-style-type: decimal">
 <li>Are a Publisher or Administrator on your Connect server.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></li>
-<li>Have RStudio Connect v 1.7.8 or higher.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></li>
+<li>Have RStudio Connect v 1.7.8 or higher.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> <!-- \vspace{-8truemm} --></li>
 </ol>
 </div>
-<div id="prework-api-keys" class="section level1">
-<h1>Prework: API Keys</h1>
-<p>API keys will let the RStudio IDE communicate with Connect on our behalf, acting as our credentials. The steps below will save your credentials for future work, so these are one-time only steps:</p>
+<div id="prework" class="section level1">
+<h1>Prework</h1>
+
+<p><strong>API keys</strong> will let the RStudio IDE communicate with Connect on our behalf, acting as our credentials. The steps below will save your credentials for future work, so these are one-time only steps:</p>
 <ol style="list-style-type: decimal">
-<li>Create an API key from RStudio Connect (See: <a href="https://docs.rstudio.com/connect/user/api-keys/" class="uri">https://docs.rstudio.com/connect/user/api-keys/</a>) Give this key any name you like, such as <code>CONNECT_API_KEY</code> and be certain to copy the value to your clipboard.</li>
+<li>Create an API key from RStudio Connect<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> Give this key any name you like, such as <code>CONNECT_API_KEY</code> and be certain to copy the value to your clipboard.</li>
 <li>Return to the RStudio IDE and save your API key as a system environment variable in your .Rprofile file:
 <ol style="list-style-type: lower-alpha">
-<li>In the Console, enter <code>usethis::edit_r_profile()</code> to open your .Rprofile for editing.</li>
-<li>In the .RProfile file, insert <code>Sys.setenv(&quot;CONNECT_API_KEY&quot; = &quot;key value from your clipboard&quot;)</code>.</li>
+<li>In the Console, enter <code>usethis::edit_r_profile()</code> to open your .Rprofile for editing</li>
+<li>In the .RProfile, insert <code>Sys.setenv( &quot;CONNECT_API_KEY&quot; = &quot;paste key value&quot;)</code></li>
 </ol></li>
 <li>For convenience, save your RStudio Connect server address as a system environment variable in your .RProfile as well. Example: <code>Sys.setenv(&quot;CONNECT_SERVER&quot; = &quot;https://your-server-address.com/&quot;)</code></li>
-<li>Save and close the file.</li>
+<li>Save and close the file</li>
 <li>Restart R (shift + cmd + F10)</li>
 </ol>
-<p>Note, saving your key as a system environment variable is a best practice. This lets you call your key without explicitly hard coding the value into your scripts. It’s also a good idea to put it in your .gitignore file (or equivalent) to ensure you’re not publishing it to your version control platform.</p>
-<p>Now we’re ready to get cooking!</p>
+<p>If you’re using git, it’s a good idea to add your .RProfile to your .gitignore, perhaps with <code>usethis::use_git_ignore()</code>, to ensure you’re not publishing your API key to your version control system.</p>
+<p><strong>Install <code>pins</code>.</strong> The <code>pins</code> package is available on CRAN, and was at version 0.4.0 at the time of this writing. Install <code>pins</code> with <code>install.packages(&quot;pins&quot;)</code>.</p>
+<p>Now let’s get cooking! 🍳</p>
 </div>
-<div id="walk-me-through-my-first-pin" class="section level1">
-<h1>Walk me Through my First <code>pin</code></h1>
-<p>The <code>pins</code> package is available on CRAN, and was at version 0.4.0 at the time of this writing. Install <code>pins</code> with <code>install.packages(&quot;pins&quot;)</code>.</p>
-<p>The first step in using <code>pins</code> is to “Register” the board. This means you’re identifying a location where you can store resources. You’re registering, or recognizing, the location of the virtual cork board within your current RStudio session.</p>
+<div id="pinning-to-rstudio-connect" class="section level1">
+<h1>Pinning to RStudio Connect</h1>
+
+<p>The first step in using pins is to “Register” the board. This just means you’re identifying a location where you can store resources.</p>
 <p><strong>Register RStudio Connect as the board</strong> with the following script:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">#Register RStudio Connect</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a>pins<span class="op">::</span><span class="kw">board_register</span>(</span>
 <span id="cb1-3"><a href="#cb1-3"></a>    <span class="st">&quot;rsconnect&quot;</span>, </span>
-<span id="cb1-4"><a href="#cb1-4"></a>    <span class="dt">server =</span> <span class="st">&quot;CONNECT_SERVER&quot;</span>, </span>
-<span id="cb1-5"><a href="#cb1-5"></a>    <span class="dt">key =</span> <span class="kw">Sys.getenv</span>(<span class="st">&quot;CONNECT_API_KEY&quot;</span>)</span>
-<span id="cb1-6"><a href="#cb1-6"></a>    )</span></code></pre></div>
-<p>Now it’s time to <code>pin</code> your first resource. Select an object and <strong>pin to the rsconnect board with:</strong></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co">#pin object</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>pins<span class="op">::</span><span class="kw">pin</span>(my_data, </span>
-<span id="cb2-3"><a href="#cb2-3"></a>    <span class="dt">name =</span> <span class="st">&quot;my_data&quot;</span>, </span>
-<span id="cb2-4"><a href="#cb2-4"></a>    <span class="dt">description =</span> <span class="st">&quot;A lovely pin!&quot;</span>, </span>
-<span id="cb2-5"><a href="#cb2-5"></a>    <span class="dt">board =</span> <span class="st">&quot;rsconnect&quot;</span>)</span></code></pre></div>
-<p>The <code>name</code> argument will be the name of the content when deployed on Connect. The <code>description</code> should help you and others know what the pin is. And the specific <code>board</code> argument of <code>rsconnect</code> tells the <code>pins</code> package that the destination is RStudio Connect. You’d change this argument if you were bound for other destinations.</p>
-<p>With those two commands, you’ve pinned your first asset. Congratulations! Be sure to adjust the <strong>Access Settings</strong> on your <code>pin</code> in the RStudio Connect content dashboard if you want to share this <code>pin</code> with others.</p>
+<span id="cb1-4"><a href="#cb1-4"></a>    <span class="dt">server =</span> <span class="kw">Sys.getenv</span>(<span class="st">&quot;CONNECT_SERVER&quot;</span>), </span>
+<span id="cb1-5"><a href="#cb1-5"></a>    <span class="dt">key =</span> <span class="kw">Sys.getenv</span>(<span class="st">&quot;CONNECT_API_KEY&quot;</span>))</span></code></pre></div>
+<p>Now it’s time to pin your first resource. Select an object and <strong>pin to the rsconnect board with:</strong></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>my_data &lt;-<span class="st"> </span>iris <span class="co">#for example</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="co">#pin object</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>pins<span class="op">::</span><span class="kw">pin</span>(my_data, </span>
+<span id="cb2-4"><a href="#cb2-4"></a>    <span class="dt">name =</span> <span class="st">&quot;my_data&quot;</span>,</span>
+<span id="cb2-5"><a href="#cb2-5"></a>    <span class="dt">description =</span> <span class="st">&quot;A lovely pin!&quot;</span>,</span>
+<span id="cb2-6"><a href="#cb2-6"></a>    <span class="dt">board =</span> <span class="st">&quot;rsconnect&quot;</span>)</span></code></pre></div>
+<p>The <code>board</code> argument tells the <code>pins</code> package that the destination is RStudio Connect. You’d change this argument if you were bound for other destinations.</p>
+<p>With those two commands, you’ve created your first pin! Congratulations! Be sure to adjust the <strong>Access Settings</strong> on your pin in the RStudio Connect content dashboard if you want to share this pin with others.</p>
 </div>
-<div id="retrieving-a-pin-from-rstudio-connect" class="section level1">
-<h1>Retrieving a <code>pin</code> from RStudio Connect</h1>
-<p>If you head over to Connect, you’ll notice your <code>pin</code> has some useful header information for pin retrieval. So let’s copy that code into our analysis and <strong>retrieve the pin</strong>.</p>
-<p>Replace the <code># Retrieve pin</code> code section below with the sample from your own pin:</p>
+<div id="retrieving-a-pin-from-connect" class="section level1">
+<h1>Retrieving a Pin From Connect</h1>
+
+<p>If you head over to Connect, you’ll notice your pin has some useful header information for pin retrieval. So let’s copy that code into our analysis and <strong>retrieve the pin</strong>.</p>
+<p>Replace the <code># Retrieve Pin</code> code section below with the sample from your own pin:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Register RStudio Connect</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a>pins<span class="op">::</span><span class="kw">board_register</span>(<span class="st">&quot;rsconnect&quot;</span>,</span>
 <span id="cb3-3"><a href="#cb3-3"></a>               <span class="dt">key =</span> <span class="kw">Sys.getenv</span>(<span class="st">&quot;CONNECT_API_KEY&quot;</span>),</span>
 <span id="cb3-4"><a href="#cb3-4"></a>               <span class="dt">server =</span> <span class="kw">Sys.getenv</span>(<span class="st">&quot;CONNECT_SERVER&quot;</span>))</span>
 <span id="cb3-5"><a href="#cb3-5"></a></span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="co"># Retrieve pin </span></span>
-<span id="cb3-7"><a href="#cb3-7"></a>my_data &lt;-<span class="st"> </span><span class="kw">pin_get</span>(<span class="st">&quot;your/pin&quot;</span>, <span class="dt">board =</span> <span class="st">&quot;rsconnect&quot;</span>)</span>
-<span id="cb3-8"><a href="#cb3-8"></a>  </span>
-<span id="cb3-9"><a href="#cb3-9"></a><span class="co"># View the pin locally</span></span>
-<span id="cb3-10"><a href="#cb3-10"></a><span class="kw">head</span>(my_data)</span></code></pre></div>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co"># Retrieve Pin</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a>my_data &lt;-<span class="st"> </span><span class="kw">pin_get</span>(<span class="st">&quot;your_username/my_data&quot;</span>, </span>
+<span id="cb3-8"><a href="#cb3-8"></a>                   <span class="dt">board =</span> <span class="st">&quot;rsconnect&quot;</span>)</span>
+<span id="cb3-9"><a href="#cb3-9"></a>  </span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="co"># View the pin locally</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="kw">head</span>(my_data)</span></code></pre></div>
 </div>
-<div id="include-pins-in-a-deployed-asset" class="section level1">
-<h1>Include <code>pins</code> in a Deployed Asset</h1>
-<p><code>pins</code> shine when they are a part of a workflow or pipeline supporting an app, model, or report. The last step in <code>pin</code> mastery is to deploy an asset to RStudio Connect that uses a <code>pin</code>. Heads up: this section is less about <code>pins</code> and more about environment variables, but you’ll be a master of both by the time we are through.</p>
-<p>Use your new <code>pin</code> creating and retrieving skills to call a pinned object to your content of choice to deploy to Connect. Now try to deploy your content - don’t be surprised if you got a failure to deploy and/or very angry looking error message. This is because the environment variables in your code (recall: <code>CONNECT_API_KEY</code> and <code>CONNECT_SERVER</code> from above) are not saved on the Connect server; they’re only sitting in your .Rprofile in the RStudio IDE. The specific error and where it presents may vary depending on they type of asset you’re trying to deploy (R Markdown, Shiny, plumber API, etc.), but the punchline is the same.</p>
-<p>Regardless of where and how your error presents, it’s easy to address: In the RStudio Connect content settings panel for the asset you are trying to deploy, select the <strong>Vars</strong> option and <strong>create environment variables for <code>CONNECT_API_KEY</code> and <code>CONNECT_SERVER</code></strong> - values will appear in plain text until you hit <strong>Save</strong>.</p>
-<p>That environment variable that you specify doesn’t have to be the same API key that was used when the pin was created - for example, User A might create the pin, and User B might pull it into a Shiny app. API keys are different per user, and are just a way of telling Connect that you’re allowed to <code>pin</code> resources.</p>
-<p>Click the <strong>Refresh Report</strong> button to re-render your document with the new environment variables in place. Then, go ahead… do a little dance to celebrate! You’ve published an asset that calls a pin!</p>
-<div id="a-special-tip-for-r-markdown-deployments" class="section level2">
-<h2>A Special Tip for R Markdown Deployments</h2>
-<p>If you’re trying to deploy a R Markdown document that calls a pin (or more generally, uses environment variables), make life a little friendlier for future you and any colleague that might be running your code. <strong>Insert the following code at the top of any R Markdown document that includes environment variables that will be deployed to Connect:</strong></p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Check for system environment variables</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>knitr<span class="op">::</span>opts_chunk<span class="op">$</span><span class="kw">set</span>(<span class="dt">echo =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="cf">if</span>(<span class="kw">Sys.getenv</span>(<span class="st">&#39;CONNECT_SERVER&#39;</span>) <span class="op">==</span><span class="st"> &#39;&#39;</span>) </span>
-<span id="cb4-4"><a href="#cb4-4"></a>{ <span class="st">&quot;&lt;h4&gt;ERROR: You must set the </span></span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="st">  CONNECT_SERVER environment variable&lt;/h4&gt;</span><span class="ch">\n</span><span class="st">&quot;</span> }</span>
-<span id="cb4-6"><a href="#cb4-6"></a><span class="cf">if</span>(<span class="kw">Sys.getenv</span>(<span class="st">&#39;CONNECT_API_KEY&#39;</span>) <span class="op">==</span><span class="st"> &#39;&#39;</span>) </span>
-<span id="cb4-7"><a href="#cb4-7"></a>{ <span class="st">&quot;&lt;h4&gt;ERROR: You must set the </span></span>
-<span id="cb4-8"><a href="#cb4-8"></a><span class="st">  CONNECT_API_KEY environment variable&lt;/h4&gt;</span><span class="ch">\n</span><span class="st">&quot;</span> }</span>
-<span id="cb4-9"><a href="#cb4-9"></a><span class="cf">if</span>(<span class="kw">Sys.getenv</span>(<span class="st">&#39;CONNECT_API_KEY&#39;</span>) <span class="op">==</span><span class="st"> &#39;&#39;</span> <span class="op">||</span><span class="st"> </span></span>
-<span id="cb4-10"><a href="#cb4-10"></a><span class="st">   </span><span class="kw">Sys.getenv</span>(<span class="st">&#39;CONNECT_SERVER&#39;</span>) <span class="op">==</span><span class="st"> &#39;&#39;</span>) </span>
-<span id="cb4-11"><a href="#cb4-11"></a>  { knitr<span class="op">::</span><span class="kw">knit_exit</span>() }</span></code></pre></div>
-<p>The code above will tell <code>knitr</code> to stop at that point in the rendering and exit the knitting process if these environment variables don’t exist. By placing this code at the top of your document, you’ll have a friendly reminder to set your missing environment variables rather than a red and angry failed deployment message.</p>
-</div>
+<div id="schedule-updates-to-your-pin" class="section level1">
+<h1>Schedule Updates to your Pin</h1>
+
+<p>Up to this point with pins, you’ve found a home for your mid-process artifacts like .csv files and models and learned how to share them. Now it’s time to step up your game, put your pins on a schedule for updating, and bask in glory as your analyses automatically refer to the most current data without requiring redeployment.</p>
+<p>To do this, create an R Markdown document that pulls your data, does any needed processing, and then creates your pin on RStudio Connect. This will be a supporting ETL<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> file in your pipeline. Publish this R Markdown document to Connect. Then, – <em>whoa, wait, wha?!…</em></p>
+<p>Were you greeted with a failure to deploy and/or very angry looking error message when you tried to publish your ETL? This is because the environment variables in your code (remember <code>CONNECT_API_KEY</code> and <code>CONNECT_SERVER</code>?) are not saved on the Connect server; they’re only sitting in your .Rprofile in the RStudio IDE.</p>
+<p>Don’t worry, it’s easy to address: In the RStudio Connect content settings panel for your R Markdown ETL, select the <strong>Vars</strong> option and <strong>create environment variables for <code>CONNECT_API_KEY</code> and <code>CONNECT_SERVER</code></strong> - values will appear in plain text until you hit <strong>Save</strong>.</p>
+<p>Click the <strong>Refresh Report</strong> button (<em>the button!</em> don’t just refresh your browser window) to re-render your document with the new environment variables in place. Then, go ahead… do a little dance to celebrate! You’ve published an ETL document that publishes a pin to Connect!</p>
+<p>Now to finish this little gem, click the <strong>Schedule</strong> button and establish a schedule for your ETL (and resulting pin) to refresh. Now you can point your customer-facing data analysis at this pin to always have a fresh source of data behind it. Dazzling! ✨</p>
 </div>
 <div id="where-do-i-go-from-here" class="section level1">
-<h1>Where do I go From Here?</h1>
-<p>At this point, you know what a <code>pin</code> is, whether <code>pins</code> will be useful for your workflow, and all the basic steps for working with <code>pins</code>. What next?</p>
+<h1>Where Do I Go From Here?</h1>
+
+<p>At this point, you know what a pin is, whether pins will be useful for your workflow, and how to implement them. What next?</p>
 <p>Go try <code>pins</code> on your own!</p>
 <ul>
 <li>If you want more hands-on advice with data you can play with yourself, work through our detailed pinning example here: <a href="https://github.com/rstudio/CS_protips/blob/master/example_pins/example_pins.Rmd" class="uri">https://github.com/rstudio/CS_protips/blob/master/example_pins/example_pins.Rmd</a></li>
-<li>Looking for inspiration? See this content collection that uses a pinned model and datasets as part of a pipeline to support a Shiny app in Production. The underlying data in the <code>pin</code> is refreshed on a schedule, keeping the Shiny app current, <em>no re-deployments necessary</em>.</li>
-<li>We also have a ton of resources available for <code>pins</code> right at the <code>pins</code> website here: <a href="http://pins.rstudio.com/" class="uri">http://pins.rstudio.com/</a>.</li>
-<li>Check out the source code here <a href="https://github.com/rstudio/pins" class="uri">https://github.com/rstudio/pins</a>.</li>
+<li>Looking for inspiration? See this content collection that uses a pinned model and datasets as part of a pipeline to support a Shiny app in Production. The underlying data in the pin is refreshed on a schedule, keeping the Shiny app current: <a href="https://solutions.rstudio.com/tour/bike_predict/" class="uri">https://solutions.rstudio.com/tour/bike_predict/</a>.</li>
+<li>We also have a ton of resources available for pins right at the <code>pins</code> website here: <a href="http://pins.rstudio.com/" class="uri">http://pins.rstudio.com/</a>.</li>
 <li>Any issues? Let us know here: <a href="https://github.com/rstudio/pins/issues" class="uri">https://github.com/rstudio/pins/issues</a>.</li>
 </ul>
 <p>Last but not least, let us know how you get on with pins! Reach out to your Customer Success Representative, or send a note to us at <a href="mailto:sales@rstudio.com" class="email">sales@rstudio.com</a>.</p>
@@ -1693,8 +1689,10 @@ div.tocify {
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>You can retrieve a <code>pin</code> with only a Viewer role<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn1"><p>Viewers can only retrieve pins<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 <li id="fn2"><p>If you’re not yet at this version but are keen to get started with <code>pins</code>, talk to your R Admin and refer to <a href="https://docs.rstudio.com/connect/admin/server-management/#upgrading" class="uri">https://docs.rstudio.com/connect/admin/server-management/#upgrading</a><a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>See: <a href="https://docs.rstudio.com/connect/user/api-keys/" class="uri">https://docs.rstudio.com/connect/user/api-keys/</a> for step-by-step<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>extract, transform, and load<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 

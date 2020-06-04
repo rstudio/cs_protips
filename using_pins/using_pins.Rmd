@@ -1,5 +1,4 @@
 ---
-title: "Creating Efficient Workflows with `pins`"
 output:
   pdf_document:
     latex_engine: xelatex
@@ -12,7 +11,7 @@ output:
     includes:
       in_header: template_files/header.html
       after_body: template_files/footer.html
-geometry: left=1cm,right=1cm,top=5.3cm,bottom=2.8cm
+geometry: left=1cm,right=1cm,top=6cm,bottom=2.4cm
 classoption:
 - twocolumn
 ---
@@ -25,7 +24,7 @@ Like that one piece of furniture in your living room that you _need_, but you ju
 
 Think about some of your workflows.  Are you:  
 
-* Using `read.csv()` to bring in data that is emailed to you after every update? 
+* Using `read.csv()` to bring in emailed data? 
 * Saving `.Rds` or `.RData` objects to be called later? 
 * Sharing your model or data across multiple apps?
 * Redeploying your app every time the supporting data is updated?
@@ -33,15 +32,15 @@ Think about some of your workflows.  Are you:
 A "yes" to any of the above indicates a solid use case for `pins`! Here at RStudio, we developed `pins` to make discovering, caching, and sharing resources simpler, all to promote efficient data workflows.  
 
 # What are Pins?
-Just like you’d pin a note (or a photo of your BFF) to a physical cork board, `pins` lets you pin an R or Python object to virtual board where you and others access it.  The virtual board can be on RStudio Connect, S3, Google Cloud, or even your website, to name a few.
+Just like you’d pin a note to a physical cork board, `pins` lets you pin an R or Python object to virtual board where you and others access it.  The virtual board can be on RStudio Connect, S3, Google Cloud, or your own website, to name a few.
 
 Pins are best suited for objects around a few hundred megabytes.  Often they're made of lightweight or ephemeral data, and they may be relied upon by multiple assets.  
 
-Once pinned, it’s much easier to share internal datasets across multiple assets or across your team. If you’re using RStudio Connect, you can be sure that only the right people can access your pins with the RStudio Connect access controls you’re already used to.
+Once pinned, it’s much easier to share internal datasets across multiple assets or across your team. If you’re using RStudio Connect, you can manage who can access your pins with the RStudio Connect access controls you’re already used to.
 
-In this Pro Tip, you’ll learn how to pin and retrieve a resource on RStudio Connect and how to schedule updates to pins so downstream analyses always stay current  without re-deployment.   
+In this Pro Tip, you’ll learn how to pin and retrieve a resource on RStudio Connect and how to schedule updates to pins so downstream analyses always current without re-deployment.   
 
-**For a follow-along accompaniment to this Pro Tip with real data see: <https://github.com/rstudio/CS_protips/blob/master/example_pins/>**  
+**For a follow-along accompaniment to this Pro Tip with real data see:** <https://github.com/rstudio/cs_protips/tree/master/example_pins/>  
 
 # Requirements
 To utilize `pins` with Connect make sure you:
@@ -54,11 +53,11 @@ To utilize `pins` with Connect make sure you:
 
 1. Create an API key from RStudio Connect^[See: https://docs.rstudio.com/connect/user/api-keys/] Give this key any name you like, such as `CONNECT_API_KEY` and be certain to copy the value to your clipboard.
 1. Return to the RStudio IDE and save your API key as a system environment variable in your .Rprofile file:
-    a. In the Console, enter `usethis::edit_r_profile()` to open your .Rprofile for editing
-    a. In the .RProfile, insert `Sys.setenv( "CONNECT_API_KEY" = "paste key value")`
+    a. In the Console, enter `usethis::edit_r_profile()` to open your .Rprofile for editing.
+    a. In the .RProfile, insert `Sys.setenv( "CONNECT_API_KEY" = "paste key value")`.
 1. For convenience, save your RStudio Connect server address as a system environment variable in your .RProfile as well. Example: `Sys.setenv("CONNECT_SERVER" = "https://your-server-address.com/")`
-1. Save and close the file
-1. Restart R (shift + cmd + F10)
+1. Save and close the file.
+1. Restart R (shift + cmd + F10).
 
 If you're using git, it's a good idea to add your .RProfile to your .gitignore, perhaps with `usethis::use_git_ignore()`, to ensure you're not publishing your API key to your version control system.
 
@@ -70,8 +69,8 @@ Now let's get cooking! `r emo::ji("fried_egg")`
 The first step in using pins is to "Register" the board. This just means you're identifying a location where you can store resources.  
 
 **Register Connect as the board** with the following:
+\vspace{-4truemm}
 ```{r}
-#Register RStudio Connect
 pins::board_register(
     "rsconnect", 
     server = Sys.getenv("CONNECT_SERVER"), 
@@ -79,6 +78,8 @@ pins::board_register(
 ```
 
 Now it's time to pin your first resource. Select an object and **pin to the rsconnect board with:**
+\vspace{-4truemm}
+
 ```{r}
 my_data <- iris #for example
 #pin object
@@ -88,16 +89,17 @@ pins::pin(my_data,
     board = "rsconnect")
 ```
 
-The `board` argument tells the `pins` package that the destination is RStudio Connect. You'd change this argument if you were bound for other destinations.  
+The `board` argument tells the `pins` package that the destination is RStudio Connect. Change this argument if you are bound for other destinations.  
 
 With those two commands, you've created your first pin! Congratulations! Be sure to adjust the **Access Settings** on your pin in the RStudio Connect content dashboard if you want to share this pin with others.
 
 # Retrieving a Pin From Connect  
-If you head over to Connect, you'll notice your pin has some useful header information for pin retrieval. So let's copy that code into our analysis and **retrieve the pin**. 
+When you view your  pin on Connect, you'll notice there is some header information included for pin retrieval. Let's copy that code into our analysis and **retrieve the pin**. 
 
 Replace the `# Retrieve Pin` code section below with the sample from your own pin:
+\vspace{-4truemm}
+
 ``` {r}
-# Register RStudio Connect
 pins::board_register("rsconnect",
                key = Sys.getenv("CONNECT_API_KEY"),
                server = Sys.getenv("CONNECT_SERVER"))
@@ -105,9 +107,6 @@ pins::board_register("rsconnect",
 # Retrieve Pin
 my_data <- pin_get("your_username/my_data", 
                    board = "rsconnect")
-  
-# View the pin locally
-head(my_data)
 ```
 
 # Schedule Updates to your Pin
@@ -128,7 +127,7 @@ At this point, you know what a pin is, whether pins will be useful for your work
 
 Go try `pins` on your own!
 
-* If you want more hands-on advice with data you can play with yourself, work through our detailed pinning example here: <https://github.com/rstudio/CS_protips/blob/master/example_pins/example_pins.Rmd>
+* If you want more hands-on advice with data you can play with yourself, work through our detailed pinning example here: <https://github.com/rstudio/cs_protips/tree/master/example_pins/>
 * Looking for inspiration? See this content collection that uses a pinned model and datasets as part of a pipeline to support a Shiny app in Production. The underlying data in the pin is refreshed on a schedule, keeping the Shiny app current: <https://solutions.rstudio.com/tour/bike_predict/>.
 * We also have a ton of resources available for pins right at the `pins` website here: <http://pins.rstudio.com/>.
 * Any issues? Let us know here: <https://github.com/rstudio/pins/issues>. 

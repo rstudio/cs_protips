@@ -1,0 +1,12 @@
+name: katies-branch-using_pins
+title: Katies-branch-using_pins
+username: katie
+account: katie
+server: colorado.rstudio.com
+hostUrl: https://colorado.rstudio.com/rsc/__api__
+appId: 6637
+bundleId: 38292
+url: https://colorado.rstudio.com/rsc/content/6637/
+when: 1591164746.4665
+asMultiple: FALSE
+asStatic: FALSE

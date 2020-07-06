@@ -27,7 +27,7 @@ knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 # When your Workflow is Clunky
 Like that one piece of furniture in your living room that you _need_, but you just can't find a spot for, we often struggle to find a home for the mid-process artifacts of a data analysis.  
 
-Think about some of your workflows.  Are you:  
+Think about some of your workflows.  Are you: # I think this should come first before the furniture analogy. Also not sure if furniture analogy is needed.
 
 * Using `read.csv()`{.R} to bring in emailed data?
 * Saving `.Rds` or `.RData` objects to be called later? 
@@ -51,7 +51,7 @@ In this Pro Tip, you’ll learn how to pin and retrieve a resource on RStudio Co
 To utilize `pins` with Connect make sure you:
 
 1. Are a Publisher or Administrator on your Connect server.^[Viewers can only retrieve Pins]
-1. Have RStudio Connect v 1.7.8 or higher.^[If you're not yet at this version but are keen to get started with `pins`, talk to your R Admin and refer to https://docs.rstudio.com/connect/admin/server-management/#upgrading]
+1. Have RStudio Connect v 1.7.8 or higher.^[If you're not yet at this version but are keen to get started with `pins`, talk to your R Admin and refer to https://docs.rstudio.com/connect/admin/server-management/#upgrading] # This footnote is split between the two columns and makes it a little hard to read
 
 # Prework   
 **API keys** let the RStudio IDE communicate with Connect on our behalf, acting as our credentials.  The steps below will save your credentials for future work, so these are one-time only steps:
@@ -59,10 +59,10 @@ To utilize `pins` with Connect make sure you:
 1. Create an API key from RStudio Connect^[See: https://docs.rstudio.com/connect/user/api-keys/] Give this key any name you like, such as `CONNECT_API_KEY`{.sh} and be certain to copy the value to your clipboard.
 1. Return to the RStudio IDE and save your API key as a system environment variable in your .Rprofile file:
     a. In the Console, enter `usethis::edit_r_profile()`{.R} to open your .Rprofile for editing.
-    a. In the .RProfile, insert  `Sys.setenv( "CONNECT_API_KEY" = "paste key value")`{.R}.
-1. For convenience, save your RStudio Connect server address as a system environment variable in your .RProfile as well. Example: `Sys.setenv("CONNECT_SERVER" = "https://your-server-address.com/")`{.R}
+    a. In the .RProfile, insert  `Sys.setenv("CONNECT_API_KEY" = "paste key value")`{.R}.
+1. For convenience, save your RStudio Connect server address as a system environment variable in your .RProfile as well. Example: `Sys.setenv("CONNECT_SERVER" = "https://your-server-address.com/")`{.R} # It's important that there is an extra "return" character added (or an empty line) after the last line of the .RProfile file or else the last line won't be executed.
 1. Save and close the file.
-1. Restart R (shift + cmd + F10).
+1. Restart R (shift + cmd + F10). # is this the same keyboard shortcut for windows?
 
 If you're using git, it's a good idea to add your .RProfile to your .gitignore, perhaps with `usethis::use_git_ignore()`{.R}, to ensure you're not publishing your API key to your version control system.
 
@@ -86,7 +86,7 @@ Now it's time to pin your first resource. Select an object and **pin to the rsco
 \vspace{-4truemm}
 
 ```{r}
-my_data <- iris #for example
+my_data <- iris #for example (there has been a lot of backlash regarding use of the iris dataset, maybe use penguins! https://github.com/allisonhorst/palmerpenguins...or mtcars for something built into R
 #pin object
 pins::pin(my_data, 
     name = "my_data",
@@ -112,7 +112,7 @@ pins::board_register("rsconnect",
          )
 
 # Retrieve Pin
-my_data <- pin_get("your_username/my_data", 
+my_data <- pins::pin_get("your_username/my_data", 
                    board = "rsconnect")
 ```
 
@@ -121,7 +121,7 @@ Up to this point, you've found a home for your mid-process artifacts and learned
 
 To do this, create an R Markdown document that pulls your data, does any needed processing, and then creates your Pin on RStudio Connect. This will be a supporting ETL (extract, transform, and load) file in your pipeline.  Publish this R Markdown document to Connect. Then, -- *whoa, wait, wha?!...* 
 
-Were you greeted with a failure to deploy and/or very angry looking error message when you tried to publish your ETL? This is because the environment variables in your code (`CONNECT_API_KEY` and `CONNECT_SERVER`) are not saved on the Connect server; they're only sitting in your .Rprofile in the RStudio IDE. 
+Were you greeted with a failure to deploy and/or very angry looking error message when you tried to publish your ETL? This is because the environment variables in your code (`CONNECT_API_KEY` and `CONNECT_SERVER`) are not saved on the Connect server; they're only sitting in your .RProfile in the RStudio IDE. 
 
 Don't worry, it's easy to address: In the RStudio Connect content settings panel for your R Markdown ETL, select the **Vars** option and **create environment variables for `CONNECT_API_KEY` and `CONNECT_SERVER`** - values will appear in plain text until you hit **Save**.
 

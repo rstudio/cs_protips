@@ -37,13 +37,13 @@ Think about some of your workflows.  Are you:
 A "yes" to any of the above indicates a solid use case for `pins`! Here at RStudio, we developed `pins` to make discovering, caching, and sharing resources simpler, all to promote efficient data workflows.  
 
 # What are Pins?
-Just like you’d pin a note (or a picture of your BFF) to a physical cork board, `pins` lets you pin an R or Python object to virtual board where you and others access it.  The virtual board can be on RStudio Connect, S3, Google Cloud, or your own website, to name a few.
+Just like you’d pin a note (or a picture of your BFF) to a physical cork board, `pins` lets you pin an R or Python object to a virtual board where you and others access it.  The virtual board can be on RStudio Connect ("Connect"), S3, Google Cloud, or your own website, to name a few.
 
-Pins are best suited for objects around a few hundred megabytes.  Often they're made of lightweight or ephemeral data, and they may be relied upon by multiple assets.  
+Pins are best suited for objects up to a few hundred megabytes in size.  Often they're made of lightweight or ephemeral data, and they may be relied upon by multiple assets.  
 
-Once pinned, it’s much easier to share internal datasets across multiple assets or across your team. If you’re using RStudio Connect, you can manage who can access your Pins with the RStudio Connect access controls you’re already used to.
+For example with datasets, it's much easier (and safer) to share a Pin of an internal dataset across multiple assets or across your team than to email it around. Further, if you’re using [RStudio Connect](https://rstudio.com/products/connect/), you can manage who can access your Pins.
 
-In this Pro Tip, you’ll learn how to pin and retrieve a resource on RStudio Connect and how to schedule updates to Pins so downstream analyses always current without re-deployment.   
+In this Pro Tip, you’ll learn how to pin and retrieve a resource on RStudio Connect and how to schedule updates to Pins so downstream analyses are always current without re-deployment.
 
 **For a follow-along accompaniment to this Pro Tip with real data see:** <https://github.com/rstudio/cs_protips/tree/master/pins_in_rsc/example_pins>  
 
@@ -53,25 +53,23 @@ To utilize `pins` with Connect make sure you:
 1. Are a Publisher or Administrator on your Connect server.^[Viewers can only retrieve Pins]
 1. Have RStudio Connect v 1.7.8 or higher.^[If you're not yet at this version but are keen to get started with `pins`, talk to your R Admin and refer to https://docs.rstudio.com/connect/admin/server-management/#upgrading]
 
-# Prework   
-**API keys** let the RStudio IDE communicate with Connect on our behalf, acting as our credentials.  The steps below will save your credentials for future work, so these are one-time only steps:
+# One-time Setup   
+API keys let the RStudio IDE communicate with Connect on our behalf, acting as our credentials.  The steps below will save your credentials for future work, so these are one-time only steps:
 
 1. Create an API key from RStudio Connect^[See: https://docs.rstudio.com/connect/user/api-keys/] Give this key any name you like, such as `CONNECT_API_KEY`{.sh} and be certain to copy the value to your clipboard.
 1. Return to the RStudio IDE and save your API key as a system environment variable in your .Rprofile file:
     a. In the Console, enter `usethis::edit_r_profile()`{.R} to open your .Rprofile for editing.
-    a. In the .RProfile, insert  `Sys.setenv( "CONNECT_API_KEY" = "paste key value")`{.R}.
+    a. In the .RProfile, insert  `Sys.setenv( "CONNECT_API_KEY" = "paste key value")`{.R}^[If you're using git, it's a good idea to add your .RProfile to your .gitignore with the name you gave the key above e.g. `usethis::use_git_ignore("CONNECT_API_KEY")`{.R}, to ensure you're not publishing your API key to your version control system.]
 1. For convenience, save your RStudio Connect server address as a system environment variable in your .RProfile as well. Example: `Sys.setenv("CONNECT_SERVER" = "https://your-server-address.com/")`{.R}
 1. Save and close the file.
-1. Restart R (shift + cmd + F10).
-
-If you're using git, it's a good idea to add your .RProfile to your .gitignore, perhaps with `usethis::use_git_ignore()`{.R}, to ensure you're not publishing your API key to your version control system.
+1. Restart R (Mac: cmd + shift + F10, PC/Linux: cntrl + shift + F10).
 
 **Install  `pins`.** The `pins` package is available on CRAN, and was at version `r packageVersion("pins")` at the time of this writing.  Install `pins` with `install.packages("pins")`{.R}.
 
 Now let's get cooking! `r if(knitr::is_html_output()) emo::ji("fried_egg") else knitr::include_graphics("template_files/emoji_fried_egg.png")`
 
 # Pinning to RStudio Connect
-The first step in using Pins is to "Register" the board. This just means you're identifying a location where you can store resources.  
+The first step in using Pins is to "Register" the board. This just means you're identifying a location where you can store resources. Let's open up a new .R script in the RStudio IDE, then paste and run the code below.
 
 **Register Connect as the board** with the following:
 \vspace{-4truemm}
@@ -86,8 +84,8 @@ Now it's time to pin your first resource. Select an object and **pin to the rsco
 \vspace{-4truemm}
 
 ```{r}
-my_data <- iris #for example
-#pin object
+my_data <- faithful # For example
+# Pin the object
 pins::pin(my_data, 
     name = "my_data",
     description = "A lovely pin!",
@@ -105,14 +103,14 @@ Replace the `# Retrieve Pin` code section below with the sample from your own Pi
 \vspace{-4truemm}
 
 ``` {r}
-# Register RStudio Connect
+# Register a board, only needed if a new session
 pins::board_register("rsconnect",
          key = Sys.getenv("CONNECT_API_KEY"),
          server = Sys.getenv("CONNECT_SERVER")
          )
 
 # Retrieve Pin
-my_data <- pin_get("your_username/my_data", 
+my_data <- pins::pin_get("your_username/my_data", 
                    board = "rsconnect")
 ```
 
@@ -125,14 +123,14 @@ Were you greeted with a failure to deploy and/or very angry looking error messag
 
 Don't worry, it's easy to address: In the RStudio Connect content settings panel for your R Markdown ETL, select the **Vars** option and **create environment variables for `CONNECT_API_KEY` and `CONNECT_SERVER`** - values will appear in plain text until you hit **Save**.
 
-Click the **Refresh Report** button (*the button!* don't just refresh your browser window) to re-render your document with the new environment variables in place. Then, go ahead... do a little dance to celebrate!  You've published an ETL document that publishes a Pin to Connect! 
+Click the **Refresh Report** icon (in the upper right corner of the screen in Connect, a circle with an arrow, don't just refresh your browser window) to re-render your document with the new environment variables in place. Then, go ahead... do a little dance to celebrate!  You've published an ETL document that publishes a Pin to Connect! 
 
 To finish this little gem, click the **Schedule** button and establish a schedule for your ETL (and resulting Pin) to refresh.  Now you can point your customer-facing data analysis at this Pin to always have a fresh source of data behind it. Dazzling! `r if(knitr::is_html_output()) emo::ji("sparkles") else knitr::include_graphics("template_files/emoji_sparkles.png")`
 
 # Where Do I Go From Here? 
 At this point, you know what a Pin is, whether Pins will be useful for your workflow, and how to implement them. What next?
 
-Go try `pins` on your own!
+Go try `pins` on your own data or model!
 
 * If you want more hands-on advice with data you can play with yourself, work through our detailed pinning example here: <https://github.com/rstudio/cs_protips/tree/master/pins_in_rsc/example_pins>
 * Looking for inspiration? See this content collection that uses a pinned model and datasets as part of a pipeline to support a Shiny app in Production. The underlying data in the Pin is refreshed on a schedule, keeping the Shiny app current: <https://solutions.rstudio.com/tour/bike_predict/>.

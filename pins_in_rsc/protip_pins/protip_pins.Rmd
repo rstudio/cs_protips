@@ -18,7 +18,7 @@ mainfont: Source Sans Pro
 sansfont: Source Sans Pro
 monofont: Source Code Pro
 ---
-\fancyfoot[L]{Version 1.0}
+\fancyfoot[L]{\fontsize{8}{8}\selectfont Version 1.1}
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
@@ -39,7 +39,7 @@ A "yes" to any of the above indicates a solid use case for `pins`! Here at RStud
 # What are Pins?
 Just like you’d pin a note (or a picture of your BFF) to a physical cork board, `pins` lets you pin an R or Python object to a virtual board where you and others access it. The virtual board can be on RStudio Connect, S3, or Google Cloud, to name a few.
 
-Pins are best suited for objects up to a few hundred megabytes in size. Often they're made of lightweight or ephemeral data, and they may be relied upon by multiple assets.  
+Pins are best suited for objects up to a few hundred megabytes in size. Often they're made of lightweight or ephemeral data, and multiple assets may rely on them.  
 
 For example with datasets, it's much easier (and safer) to share a Pin of an internal dataset across multiple assets or across your team than to email it around. Further, if you’re using [RStudio Connect](https://rstudio.com/products/connect/), you can manage who can access your Pins.
 
@@ -58,15 +58,15 @@ To utilize `pins` with Connect make sure you:
 
 1. Create an API key from RStudio Connect.^[See: https://docs.rstudio.com/connect/user/api-keys/] Give this key any name you like, such as `CONNECT_API_KEY`{.sh} and be certain to copy the value to your clipboard.
 1. Return to the RStudio IDE and save your API key as a system environment variable in your .RProfile file:
-    a. In the Console, enter `usethis::edit_r_profile()`{.R} to open your .Rprofile for editing.
-    a. \raggedright In the .RProfile, insert `Sys.setenv( "CONNECT_API_KEY" = "paste key value")`{.R}.
+    a. In the Console, enter `usethis::edit_r_profile()`{.R} to open your .RProfile for editing.
+    a. \hyphenpenalty 10000 In the .RProfile, insert `Sys.setenv( "CONNECT_API_KEY" = "paste key value")`{.R}. 
 1. For convenience, save your RStudio Connect server address as a system environment variable in your .RProfile as well. Example: `Sys.setenv("CONNECT_SERVER" = "https://your-server-address.com/")`{.R}
 1. Save and close the file.
 1. Restart R (Mac: cmd + shift + F10, PC/Linux: ctrl + shift + F10).
 
 If you're using git, it's a good idea to add your .RProfile to your .gitignore, perhaps with `usethis::use_git_ignore()`{.R}, to ensure you're not publishing your API key to your version control system.
 
-**Install `pins`.** The `pins` package is available on CRAN, and was at version `r packageVersion("pins")` at the time of this writing. Install `pins` with \raggedright `install.packages("pins")`{.R}.
+**Install `pins`.** The `pins` package is available on CRAN, and was at version `r packageVersion("pins")` at the time of this writing. Install `pins` with  \hyphenpenalty 10000 `install.packages("pins")`{.R}.
 
 Now let's get cooking! `r if(knitr::is_html_output()) emo::ji("fried_egg") else knitr::include_graphics("template_files/emoji_fried_egg.png")`
 
@@ -135,9 +135,9 @@ At this point, you know what a Pin is, whether Pins will be useful for your work
 
 Go try `pins` on your own!
 
-* If you want more hands-on advice with data you can play with yourself, work through our detailed pinning example here: <https://github.com/rstudio/cs_protips/tree/master/pins_in_rsc/example_pins>
+* If you want more hands-on advice with data you can play with yourself, work through our detailed pinning example here: <https://github.com/rstudio/cs_protips/tree/master/pins_in_rsc/example_pins/>.
 * Looking for inspiration? See this content collection that uses a pinned model and datasets as part of a pipeline to support a Shiny app in Production. The underlying data in the Pin is refreshed on a schedule, keeping the Shiny app current: <https://solutions.rstudio.com/tour/bike_predict/>.
-* We also have a ton of resources available for Pins right at the `pins` website here: <http://pins.rstudio.com/>. 
+* We also have a ton of resources available for Pins on the `pins` website: <http://pins.rstudio.com/>. 
 * See the Connect User Guide section on Pins: <https://docs.rstudio.com/connect/user/pins/>. 
 * Any issues? Let us know here: <https://github.com/rstudio/pins/issues>. 
 

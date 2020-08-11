@@ -26,7 +26,7 @@ header-includes:
 knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 ```
 
-# When your Workflow is Clunky
+# When your Workflow is Clunky 
 Like that one piece of furniture in your living room that you _need_, but you just can't find a spot for, we often struggle to find a home for the mid-process artifacts of a data analysis.  
 
 Think about some of your workflows. Are you:  

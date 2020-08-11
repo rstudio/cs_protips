@@ -17,6 +17,8 @@ classoption:
 mainfont: Source Sans Pro
 sansfont: Source Sans Pro
 monofont: Source Code Pro
+header-includes:
+- \usepackage[default]{sourcesanspro}
 ---
 \fancyfoot[L]{\fontsize{8}{8}\selectfont Version 1.1}
 

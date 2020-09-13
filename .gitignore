@@ -1,4 +1,9 @@
-CONNECT_API_KEY
 .Rproj.user
-.RData
 .Rhistory
+.RData
+.Ruserdata
+.DS_Store
+.Rprofile
+.Renviron
+*/.Rprofile
+*/.DS_Store

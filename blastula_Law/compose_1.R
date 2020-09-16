@@ -1,6 +1,5 @@
 library(blastula)
 library(ggplot2)
-library(keyring)
 
 # First just build a message
 owl1 <- compose_email(body = "Hello from Hogwarts")
@@ -20,12 +19,12 @@ owl2 <- add_attachment(email=owl2, file = "./test_attach.csv") # Note how have t
 
 # Third, actually send our message via smtp, using gmail here.
 # Note will need to turn on "less secure apps" in gmail by going here: https://myaccount.google.com/u/1/security, which will turn itself off without warning you after a few weeks, then re-do it.
-create_smtp_creds_file( # Note, requires library(keyring)
+create_smtp_creds_file(
   file = "gmail_creds",
   user = "rbrianlaw@gmail.com",
   provider = "gmail",
   use_ssl = FALSE
-) # Note, a pop up will ask for the pwd for the user you provided
+) # Note, a pop up will ask for the password for the user you provided
 
 # And let's make this smart about conditions
 who_to <- if (2 < 3) "brian.law@rstudio.com" else "hadleey@rstudio.com"

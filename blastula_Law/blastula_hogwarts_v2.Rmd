@@ -22,7 +22,6 @@ Putting aside how you feel about email, it is a very important mode of communica
 ```{r}
 library(tidyverse)
 library(blastula)
-library(keyring)
 owl1 <- compose_email(body = "Hello from Hogwarts")
 
 # Note, you will need to turn on "less secure apps" in gmail
@@ -78,4 +77,4 @@ which_owl %>%
 * Can I suppress sending an email based on some condition, e.g. only send if X happens? Yes.
 * Can I put this into an R Markdown document? Yes
 * Can I publish an .Rmd to RStudio Connect and use enterprise authentication, easy scheduling, and maybe most importantly the logs of who actually read the message. Why yes, let's talk.
-* Where can I learn more? email Brian (using blastula to be meta about it) and [here](https://rich-iannone.github.io/blastula/index.html)
+* Where can I learn more? email me (using blastula to be meta about it) as well as on github [here](https://rich-iannone.github.io/blastula/index.html)

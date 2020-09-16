@@ -1,0 +1,81 @@
+---
+title: "~1 Pager: Automating Emails with Blastula"
+output: pdf_document
+urlcolor: blue
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+## Why?
+Putting aside how you feel about email, it is a very important mode of communication. It also can be a very time consuming one, especially for recurring tasks such as emailing a nightly report. Let's work through how you can use R to automate some of the recurring email in your life by using library(blastula). 
+
+## How?
+### Example 1, a letter from Hogwarts
+
+- In the RStudio IDE, click on File > New File > R Script
+
+- Paste the text below inside that script to send a test message using gmail 
+
+```{r}
+library(tidyverse)
+library(blastula)
+library(keyring)
+owl1 <- compose_email(body = "Hello from Hogwarts")
+
+# Note, you will need to turn on "less secure apps" in gmail
+# from this page: https://myaccount.google.com/u/1/security
+create_smtp_creds_file(
+  file = "gmail_creds",
+  user = "_____@gmail.com", # use your gmail address
+  provider = "gmail"
+) # Note, a pop up will ask for the password for the user you provided
+
+owl1 %>% smtp_send(
+  to = "______@____.com",
+  from = "_____@gmail.com",
+  subject = "Testing automating emails, v1",
+  credentials = creds_file("gmail_creds")
+  )
+```
+
+- Then run through code above line by line, then check your recipient's email for an owl!
+
+### Example 2, A letter from Hogwarts with a ggplot, text styling, and conditional logic 
+
+- Copy this text and paste it inside the script from earlier, just below the line beginning `owl1 <-`
+
+```{r}
+viz <- ggplot(data=mpg) + geom_point(mapping=aes(x=displ, y=hwy), color="blue") + 
+  theme_minimal() + xlab("Year at Hogwarts") + ylab("# of Wands Broken")
+
+owl2 <- compose_email(
+  body=md(c("Hello from Hogwarts, <br><br> First years, _PLEASE_ remember to bring more wands!",
+            add_ggplot(viz))),
+  footer="Confidential: the Ministry of Magic"
+)
+```
+
+- Copy this text and paste it so that it overwrites the section beginning `owl1 %>% smtp_send(`
+```{r}
+who_to <- if (2 < 3) "brian.law@rstudio.com" else "hadleey@rstudio.com"
+which_owl <- if (2 < 3) owl2 else owl1
+
+which_owl %>%
+  smtp_send(
+    to = who_to,
+    from = "_____@gmail.com",
+    subject = "Testing automating emails, v2",
+    credentials = creds_file("gmail_creds")
+  )
+```
+- Then run through code above line by line, then check your email for a second owl!
+
+### FAQ's
+* Can I include attachments? Yes, e.g. `owl1 <- add_attachment(email=owl1, file = "./test_attach.csv")`
+* Can I suppress sending an email based on some condition, e.g. only send if X happens? Yes.
+* Can I put this into an R Markdown document? Yes
+* Can I publish an .Rmd to RStudio Connect and use enterprise authentication, easy scheduling, and maybe most importantly the logs of who actually read the message. Why yes, let's talk.
+* Where can I learn more? email Brian (using blastula to be meta about it) and [here](https://rich-iannone.github.io/blastula/index.html)

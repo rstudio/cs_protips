@@ -1,0 +1,22 @@
+---
+title: "Title, Testing rmd sans RSC"
+output: html_document
+---
+
+```{r echo=FALSE}
+if (2 < 3) trigger <- TRUE else trigger <- FALSE
+```
+
+```{r echo=FALSE, eval=trigger}
+library(blastula)
+owl1 <- compose_email(body = "Hello from Hogwarts again")
+owl1 <- add_attachment(email=owl1, file = "./test_attach.csv") # have to assign back in. Argh! Let's add an example in the docs
+
+owl1 %>%
+  smtp_send(
+    to = "brian.law@rstudio.com",
+    from = "rbrianlaw@gmail.com",
+    subject = "Testing automating emails, v2",
+    credentials = creds_file("gmail_creds")
+  )
+```

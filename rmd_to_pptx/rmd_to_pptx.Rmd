@@ -1,0 +1,54 @@
+---
+title: "R Markdown to PowerPoint"
+output:
+  powerpoint_presentation
+#  powerpoint_presentation:
+#    reference_doc: pptx_template_rstudio.pptx
+urlcolor: blue
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Why?
+> "Reports of my death have been greatly exaggerated".
+> 
+> --- Mark Twain
+
+## How?
+
+Given that we communicate with PowerPoint, how can we do so most efficiently? In particular, how can we close the distance between our analyses and pptx outputs?  
+
+With R Markdown!
+
+## Example, Vanilla
+
+- In the RStudio IDE, click on File > New File > R Markdown...
+
+- Then in the pop-up, click Presentation > PowerPoint > OK.
+
+- Then click Knit. Voila!
+
+## Example, Vanilla w/Chocolate Sauce
+
+PowerPoint usage is often correlated with a desire for things to look a certain way. Fortunately, we can export *directly* into an existing PowerPoint template, which means the slides will look a certain way, have a certain logo... These sort of aesthetic changes are often the most painful to replicate and so this functionality can save us a great deal of time.
+
+Let's run through an example. First, in the RStudio IDE, let's open a new text file: File > New File > Text File. Then, go to the R Markdown book, [Section 4.4](https://bookdown.org/yihui/rmarkdown/powerpoint-presentation.html) and copy that code into a the Text file, save it as "example_for_template.Rmd", and Knit it. Next, download a PowerPoint template into the same directory where you just saved your file. Then edit the start of your .Rmd script like in [Section 4.4.1](https://bookdown.org/yihui/rmarkdown/powerpoint-presentation.html#ppt-templates), changing the reference_doc to be the name of your PowerPoint template you saved. Save and Knit the R Markdown file again. It should populate the slides with that templates formatting already in place. 
+
+## FAQ's, how to make bullets? Use a dash
+
+- Bullet 1
+- Bullet 2
+- Bullet 3
+
+## FAQ's, can I insert a plot or table? Yes
+
+Note that any tables or images will be on their own slides. Like the next slide.
+
+```{r pressure}
+plot(pressure)
+```
+
+## The Official Guide
+To dig further, please see our book on R Markdown, and this [section](https://bookdown.org/yihui/rmarkdown/powerpoint-presentation.html) in particular. 

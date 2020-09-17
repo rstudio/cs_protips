@@ -1,0 +1,45 @@
+---
+title: "1 Pager: R Markdown to PowerPoint"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+> "Reports of my death have been greatly exaggerated".
+> 
+> --- Mark Twain
+
+## Why?
+
+People have been saying that PowerPoint will/should/could go away for at least 20 years and yet... This one-pager will get you up and running with creating a PowerPoint presentation from an R Markdown document. The goal is to shorten the distance between analysis and communication, which will make our work more robust, reproducible, and efficient. 
+
+## How?
+### Example 1, plain vanilla
+
+- In the RStudio IDE, click on File > New File > R Markdown...
+
+- Then in the pop-up, click Presentation > PowerPoint > OK.
+
+- Then click Knit, save the file, and Voila!
+
+### Example 2, vanilla w/chocolate sauce
+
+Wherever you work, there is a good chance the institution has a preferred PowerPoint template; good news, we can populate that template *directly* from R using R Markdown. The end result will be that slides will have a particular color palette, look a certain way, have a certain logo... These sort of aesthetic changes are often the most painful to replicate and so this functionality can save us a great deal of time.
+
+- First, in the RStudio IDE, let's open a new text file: File > New File > Text File. 
+
+- Then, go to the R Markdown book, [Section 4.4](https://bookdown.org/yihui/rmarkdown/powerpoint-presentation.html) and copy that code into the Text file, and save it as "example_for_template.Rmd", and Knit it. 
+
+- Next, download a PowerPoint template into the same directory where you just saved your file. 
+
+- Then edit the start of your .Rmd script like in [Section 4.4.1](https://bookdown.org/yihui/rmarkdown/powerpoint-presentation.html#ppt-templates), changing the reference_doc to be the name of your PowerPoint template you saved. 
+
+- Save and Knit the R Markdown file again. It should populate the slides with that template's formatting already in place.
+
+### FAQ's
+* Can I make bullets? Yes, with the "-"
+* Can I insert a plot or table? Yes. Note that any tables or images will be on their own slides.
+* Can I do [very specific customization X]? In general yes, but we suggest you consider the tradeoff between making them in R versus inside PowerPoint itself. Exporting from R Markdown to PowerPoint is best used along with a template to get things exported in a lossless way from your analysis versus moving one chart many times to see which way looks best is something you _could_ do in R but may want to do in PowerPoint.
+* Where can I learn more? 2 main places: 1) please see our book on R Markdown, and this [section](https://bookdown.org/yihui/rmarkdown/powerpoint-presentation.html) in particular. 2) Dave Gohel has written two open source R packages that are fantastic and give you much more granular control to create and edit MS Office documents from R; they are [officer](https://davidgohel.github.io/officer/) and [officedown](https://davidgohel.github.io/officedown/).

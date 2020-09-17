@@ -8,6 +8,6 @@ Audience: data science practicioners
 
 Outreach: Kind of, [this sequence](https://app2b.outreach.io/sequences/212) combines two things: an invitation to check out our conf::2020 materials, and an invitation to screenshare on Rmd to PPTX. 
 
-Video: ____You betcha: ____. 
+Video: Indeed, hosted on google drive [here](https://drive.google.com/file/d/1DQ3E1HOcN2KwAR5i-HxAalOjDm2--xD3/view?usp=sharing). 
 
-Other:    should have done at least 2 things to make this better: 1) ask up front about "how do you all present with tables currently?" and at the end to close with an ask to keep the conversation growing like "can we schedule a follow up call to go over an example of your own?" or "other folks I can help by giving the same screenshare to?".
+Other: This was a bit artificial because there was no audience and so one key thing is that when doing this for real to ask them how they incorporating PPTX into their workflow today. And then at the end to talk about how nicely RSC works with this and frees up their time to do the actual data science.

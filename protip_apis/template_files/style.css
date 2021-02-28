@@ -1,0 +1,14 @@
+/* Whole document: */
+
+/* Headers */
+/*h1,h2,h3,h4,h5,h6{
+  font-size: 16pt;
+}*/
+
+body { font-family: 'Source Sans Pro'; }
+
+a, a > code {
+  font-family: 'Source Code Pro';
+/*  color: rgb(87, 130, 178);
+  text-decoration: none; */
+}

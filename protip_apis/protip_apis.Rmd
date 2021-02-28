@@ -1,0 +1,52 @@
+---
+output:
+  html_document:
+    toc: yes
+    toc_float: yes
+    css: "template_files/style.css"
+    highlight: pygments
+    includes:
+      in_header: template_files/header.html
+      after_body: template_files/footer.html
+  pdf_document:
+    latex_engine: xelatex
+    includes:
+      in_header: template_files/header.tex
+geometry: left=1cm,right=1cm,top=6cm,bottom=2.4cm
+classoption:
+- twocolumn
+mainfont: "Source Sans Pro"
+sansfont: "Source Sans Pro"
+monofont: "Source Code Pro"
+header-includes:
+- \usepackage[default]{sourcesanspro}
+---
+
+<!-- Don't forget to revise the Version number after making changes to published pro tips! -->
+
+\fancyfoot[L]{\fontsize{8}{8}\selectfont Version 1.0}
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
+```
+
+# What's the pain point?
+
+Say you've made a model that's really keen. What do you do with it? How can others use this model? What if they want to access your model from another system or from another programming language? `r if(knitr::is_html_output()) emo::ji("thinking") else knitr::include_graphics("template_files/emoji_thinking.png")`  
+Or have you <another use case >  ?
+It's time to add another tool to your data science toolbox - APIs. AP-who? Oh this things you've heard about but tried to avoid because when you Google search "what is an API?" the results might as well be in another language.\
+Straight talk on APIs
+
+# Introduce the solution
+
+Though it sounds like an advanced topic, APIs are very straightforward. Think of an API as a way to access your code (model, function, data munging script, etc.) from outside your code. Huh? Think about the USB port on your computer. You can plug in anything that has a USB plug - a camera, phone, mouse, keyboard, etc. as long as the thing you want to plug in conforms to the rules of USB port interfaces, you can plug it in, provide some kind of input to the computer, and expect some kind of output in return. Similarly REST APIs have a standard protocol so that you can query your API (plug into) from code (R, Python, JavaScript, etc.) or other systems (Tableau, Excel, <other>) and receive the output of your code. Analogies \# Requirements
+
+# How to do it
+
+```{r}
+sample_code <- function(variables) {
+  print(variables)
+}
+```
+
+# What's next / additional resources

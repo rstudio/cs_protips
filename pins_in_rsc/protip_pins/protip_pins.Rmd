@@ -14,9 +14,9 @@ output:
 geometry: left=1cm,right=1cm,top=6cm,bottom=2.4cm
 classoption:
 - twocolumn
-mainfont: sourcesanspro
-sansfont: sourcesanspro
-monofont: sourcecodepro
+# mainfont: sourcesanspro
+# sansfont: sourcesanspro
+# monofont: sourcecodepro
 header-includes:
 - \usepackage[default]{sourcesanspro}
 ---

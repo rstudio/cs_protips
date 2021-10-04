@@ -61,23 +61,19 @@ Got all that? Super! Let's get cooking! `r if(knitr::is_html_output()) emo::ji("
 # Pinning to RStudio Connect 
 Recall that virtual cork board metaphor? Every pin lives on a board, so our first step is to **create a board object** so we can call it. There are multiple board types, but for this example, we will be using a board on RStudio Connect with the following: 
 ```{r}
-board <- pins::board_rsconnect(
-  auth = "manual",
-  server = Sys.getenv("CONNECT_SERVER"), 
-  key = Sys.getenv("CONNECT_API_KEY"))
+board <- pins::board_rsconnect()
 ```
-We are being explicit in the above by specifying `auth = "manual"`{.R} and providing the environment variables `"CONNECT_SERVER"`{.R} and `"CONNECT_API_KEY"`{.R}. The default, `auth = "auto"`{.R}, automatically picks between using `"manual"`{.R} if `server` and `key` are provided; `"envvar"`{.R} if both environment variables are set^[Easily set environment variables with `usethis::edit_r_profile()`{.R} to open your .RProfile for editing, and then in the .RProfile, insert `Sys.setenv( "CONNECT_API_KEY" = "paste key value")`{.R} and `Sys.setenv( "CONNECT_SERVER" = "paste server value")`{.R}.]; or otherwise `"rsconnect"`{.R}, which uses the server registered using the `rsconnect` package. Use the auth method that works best for you.
+\vspace{-3truemm}
+You'll note that we didn't pass any arguments to `board_rsconnect()`{.R}. This function is designed to *just work* for most cases. Should you run into issues, you can specify the `auth`{.R} method to inform how you'll authenticate to RStudio Connect. Available methods outside of the default of `auth = "auto"`{.R} are to specify `auth = "manual"`{.R} and provide the server and key arguments; `auth = "envvar"`{.R} if you have already defined `"CONNECT_SERVER"`{.R} and `"CONNECT_API_KEY"`{.R} as environment variables^[Easily set environment variables with `usethis::edit_r_profile()`{.R} to open your .RProfile for editing, and then insert `Sys.setenv("CONNECT_API_KEY" = "paste key value")`{.R} and `Sys.setenv("CONNECT_SERVER" = "paste server value")`{.R}. Using environment variables is a best practice, but remember, if you're using git, it's a good idea to add your .RProfile to your .gitignore to ensure you're not publishing your API key to your version control system `r if(knitr::is_html_output()) emo::ji("scream") else knitr::include_graphics("template_files/emoji_scream.png")`]; or `auth = "rsconnect"`{.R}, to use the server registered using the `rsconnect` package.
 
-Now that we've got our board, it's time to pin something on it. Select an object and **pin to the rsconnect board with:**
-<!-- \vspace{-4truemm} -->
-
+Now that we've got our board, it's time to pin something on it. Select an object and **pin to the rsconnect board with:**  
 ```{r}
 my_data <- faithful #for example
-#pin object
 pins::pin_write(board,
   my_data,
   name = "faithful_data")
 ```
+\vspace{-3truemm}
 Tip: think of `name`{.R} like a filename. You'll want to avoid slashes and spaces. 
 
 You can optionally specify `type`{.R} in the `pin_write()`{.R} function. The default is `type = "rds"`{.R}, but you can also pin `"csv"`{.R}, `"json"`{.R}, `"arrow"`{.R} for arrow/feather files, or `"qs"`{.R} which provides more efficient compression than RDS for faster read/writes.  
@@ -96,6 +92,7 @@ my_data <- pin_read(
   board, 
   "your_username/my_data")
 ```
+\vspace{-3truemm}
 Now you, or anyone you have shared the pin with, can access this information in a secure, versioned manner. 
 
 Fun fact! Pins seek to make it both easy and *fast* to share data. Pins will automatically cache remote pins locally so it's fast to access data, but will always check to ensure the that it's up-to-date so you're never using stale data.  

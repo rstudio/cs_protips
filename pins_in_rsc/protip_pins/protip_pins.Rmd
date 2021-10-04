@@ -52,9 +52,9 @@ To utilize `pins`{.R} with Connect make sure you:
 
 1. Are a Publisher or Administrator on your Connect server.^[Viewers can only retrieve pins]
 1. Have RStudio Connect v 1.7.8 or higher.^[If you're not yet at this version but are keen to get started with `pins`, talk to your R Admin and refer to https://docs.rstudio.com/connect/admin/server-management/#upgrading]
-1. Install a current version of `pins`{.R}.  The `pins`{.R} package is available on CRAN, and was at version `r packageVersion("pins")` at the time of this writing. Install `pins`{.R} with  \hyphenpenalty 10000 `install.packages("pins")`{.R}. 
+1. Have a current version of `pins`{.R}.  The `pins`{.R} package is available on CRAN, and was at version `r packageVersion("pins")` at the time of this writing. Install `pins`{.R} with  \hyphenpenalty 10000 `install.packages("pins")`{.R}. 
 
-Got all that? Let's get cooking! `r if(knitr::is_html_output()) emo::ji("fried_egg") else knitr::include_graphics("template_files/emoji_fried_egg.png")`
+Got all that? Super! Let's get cooking! `r if(knitr::is_html_output()) emo::ji("fried_egg") else knitr::include_graphics("template_files/emoji_fried_egg.png")`
 
 
 <!-- \vspace{-4truemm} -->
@@ -66,9 +66,9 @@ board <- pins::board_rsconnect(
   server = Sys.getenv("CONNECT_SERVER"), 
   key = Sys.getenv("CONNECT_API_KEY"))
 ```
-We are being explicit in the above by specifying `auth = "manual"`{.R} and providing the environment variables `"CONNECT_SERVER"`{.R} and `"CONNECT_API_KEY"`{.R}. The default, `auth = "auto"`{.R}, automatically picks between using `"manual"`{.R} if `server` and `key` are provided, `"envvar"`{.R} if both environment variables are set^[Easily set environment variables with `usethis::edit_r_profile()`{.R} to open your .RProfile for editing, and then in the .RProfile, insert `Sys.setenv( "CONNECT_API_KEY" = "paste key value")`{.R} and `Sys.setenv( "CONNECT_SERVER" = "paste server value")`{.R}.], and `"rsconnect"`{.R} otherwise, which uses the server registered using the `rsconnect` package. Use the auth method that works best for you.
+We are being explicit in the above by specifying `auth = "manual"`{.R} and providing the environment variables `"CONNECT_SERVER"`{.R} and `"CONNECT_API_KEY"`{.R}. The default, `auth = "auto"`{.R}, automatically picks between using `"manual"`{.R} if `server` and `key` are provided; `"envvar"`{.R} if both environment variables are set^[Easily set environment variables with `usethis::edit_r_profile()`{.R} to open your .RProfile for editing, and then in the .RProfile, insert `Sys.setenv( "CONNECT_API_KEY" = "paste key value")`{.R} and `Sys.setenv( "CONNECT_SERVER" = "paste server value")`{.R}.]; or otherwise `"rsconnect"`{.R}, which uses the server registered using the `rsconnect` package. Use the auth method that works best for you.
 
-Now it's time to pin your first resource. Select an object and **pin to the rsconnect board with:**
+Now that we've got our board, it's time to pin something on it. Select an object and **pin to the rsconnect board with:**
 <!-- \vspace{-4truemm} -->
 
 ```{r}
@@ -78,6 +78,7 @@ pins::pin_write(board,
   my_data,
   name = "faithful_data")
 ```
+Tip: think of `name`{.R} like a filename. You'll want to avoid slashes and spaces. 
 
 You can optionally specify `type`{.R} in the `pin_write()`{.R} function. The default is `type = "rds"`{.R}, but you can also pin `"csv"`{.R}, `"json"`{.R}, `"arrow"`{.R} for arrow/feather files, or `"qs"`{.R} which provides more efficient compression than RDS for faster read/writes.  
 
@@ -102,7 +103,7 @@ Fun fact! Pins seek to make it both easy and *fast* to share data. Pins will aut
 # Schedule Updates to your Pin
 Up to this point, you've found a home for your mid-process artifacts and learned how to share them as pins. Now it's time to put your pins on an update schedule and bask in glory as your analyses automatically refer to the most current data without requiring redeployment.
 
-To do this, create an R Markdown document that pulls your data, does any needed processing, and then creates your pin on RStudio Connect. This will be a supporting ETL (extract, transform, and load) file in your pipeline. **Publish this R Markdown document to Connect**, and go ahead... do a little dance to celebrate! You've published an ETL document that publishes a pin to Connect, and you've got a pipeline, baby! (Hint: If you run into publishing issues, it's likely an environment variable issue.^[If you are using RStudio v 1.8.8 or higher, RStudio Connect will automatically provide these environment variables for you when you publish. If you are on an older version of Connect, or if this feature has been disabled by your admin, you should reference https://docs.rstudio.com/connect/user/api-keys/ for how to create an API key and https://docs.rstudio.com/connect/user/content-settings/#content-vars for how to input environment variables into the Vars pane of Connect.])  
+To do this, create an R Markdown document that pulls your data, does any needed processing, and then creates your pin on RStudio Connect. This will be a supporting ETL (extract, transform, and load) file in your pipeline. **Publish this R Markdown document to Connect**, and go ahead... pat yourself on the back; you've published an ETL document that publishes a pin to Connect, and you've got a pipeline, baby! Hint: If you run into publishing issues at this step, it's likely an environment variable issue.^[If you are using RStudio v 1.8.8 or higher, RStudio Connect will automatically provide these environment variables for you when you publish. If you are on an older version of Connect, or if this feature has been disabled by your admin, you should reference https://docs.rstudio.com/connect/user/api-keys/ for how to create an API key and https://docs.rstudio.com/connect/user/content-settings/#content-vars for how to input environment variables into the Vars pane of Connect.] 
 
 To finish this little gem, click the **Schedule** button in Connect and establish a schedule for your R Markdown ETL (and resulting pin) to refresh. Now you can point your downstream data analysis at this pin to always have a fresh source of data behind it. Dazzling! `r if(knitr::is_html_output()) emo::ji("sparkles") else knitr::include_graphics("template_files/emoji_sparkles.png")`
 
